@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: core-service
+  output:
+    ansi:
+      enabled: ALWAYS
+  datasource:
+    url: jdbc:mysql://${DB_URL}:3306/management_system
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    diver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    url: jdbc:mysql://${DB_URL}:3306/management_system
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+server:
+  port: 9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://{EUREKA_URL}:8761/eureka/
