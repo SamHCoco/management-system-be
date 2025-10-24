@@ -3,13 +3,12 @@ package com.samhcoco.managementsystem.core.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "employee")
 public class Employee extends Auditable {

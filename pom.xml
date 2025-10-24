@@ -38,6 +38,7 @@
 		<flyway.mysql.version>11.14.1</flyway.mysql.version>
 		<mysql.driver.version>9.4.0</mysql.driver.version>
 		<lombok.version>1.18.42</lombok.version>
+		<apache.commons.version>3.14.0</apache.commons.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,6 +74,10 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -113,6 +118,11 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 				<version>${lombok.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${apache.commons.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

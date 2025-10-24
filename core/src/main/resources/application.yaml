@@ -26,3 +26,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://{EUREKA_URL}:8761/eureka/
+
+app:
+  errors:
+    null-or-empty: "Field cannot be null or empty"
+#    not-found: "Resource not found"
+#    invalid-direction: "Invalid sort direction: {0}"
