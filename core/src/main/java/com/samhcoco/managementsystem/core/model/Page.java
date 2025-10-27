@@ -3,6 +3,7 @@ package com.samhcoco.managementsystem.core.model;
 import lombok.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static java.util.Objects.nonNull;
 
@@ -13,17 +14,12 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor
 @Builder
 public class Page {
-    private Integer number;
-    private Integer size;
-    private String sortDirection;
+    private int page = 0;
+    private int size = 20;
+    private String sort = "id";
+    private String sortDirection = PageSortDirection.ASC.toString();
 
     public PageRequest toPageRequest() {
-        if (nonNull(number) && nonNull(size) && nonNull(sortDirection)) {
-            return PageRequest.of(number, size, Sort.Direction.fromString(sortDirection));
-        }
-        if (nonNull(number) && nonNull(size)) {
-            return PageRequest.of(number, size);
-        }
-        return null;
+        return PageRequest.of(page, size, Sort.Direction.fromString(sortDirection), sort);
     }
 }
