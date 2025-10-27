@@ -1,18 +1,25 @@
 package com.samhcoco.managementsystem.core.service;
 
 import com.samhcoco.managementsystem.core.model.ErrorMessageConfig;
-import lombok.Getter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-@Getter
-public abstract class AbstractEntityValidator<T, ID> implements EntityValidator<T, ID> {
+public abstract class AbstractEntityValidator<T, ID, R extends JpaRepository<T, ID>>
+        implements EntityValidator<T, ID> {
 
-    private final JpaRepository<T, ID> repository;
+    private final R repository;
     private final ErrorMessageConfig errorMessageConfig;
 
-    public AbstractEntityValidator(JpaRepository<T, ID> repository,
+    public AbstractEntityValidator(R repository,
                                    ErrorMessageConfig errorMessageConfig) {
         this.repository = repository;
         this.errorMessageConfig = errorMessageConfig;
+    }
+
+    public ErrorMessageConfig getErrorMessageConfig() {
+        return errorMessageConfig;
+    }
+
+    public R getRepository() {
+        return repository;
     }
 }

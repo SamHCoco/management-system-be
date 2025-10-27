@@ -26,3 +26,13 @@ eureka:
   client:
     service-url:
       defaultZone: http://{EUREKA_URL}:8761/eureka/
+
+app:
+  errors:
+    null-or-empty: "Field cannot be null or empty"
+    entity-null: "Entity cannot be null"
+    field-value-set-prematurely: "Field value set prematurely"
+    field-value-invalid: "Field value invalid"
+    value-already-exists: "Field value already exists"
+#    not-found: "Resource not found"
+#    invalid-direction: "Invalid sort direction: {0}"

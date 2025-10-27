@@ -30,5 +30,6 @@ eureka:
 app:
   errors:
     null-or-empty: "Field cannot be null or empty"
+    entity-null: "Entity cannot be null"
 #    not-found: "Resource not found"
 #    invalid-direction: "Invalid sort direction: {0}"
