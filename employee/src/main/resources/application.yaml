@@ -34,8 +34,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-app:
-  errors:
+error:
+  messages:
     null-or-empty: "Field cannot be null or empty"
     entity-null: "Entity cannot be null"
     field-value-set-prematurely: "Field value set prematurely"

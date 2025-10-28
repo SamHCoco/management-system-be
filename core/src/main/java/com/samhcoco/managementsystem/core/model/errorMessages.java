@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @NoArgsConstructor
 @Configuration
-@ConfigurationProperties(prefix = "app.errors")
-public class ErrorMessageConfig {
+@ConfigurationProperties(prefix = "error.messages")
+public class errorMessages {
     private String nullOrEmpty;
     private String entityNull;
     private String fieldValueSetPrematurely;
