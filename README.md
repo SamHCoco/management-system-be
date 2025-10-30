@@ -1,6 +1,6 @@
 # Management System BE
 
-### Project Modules
+## Project Modules
 The project is organized as a multi-module Maven project with the following modules:
 - `core` - Shared core functionality
 - `employee` - Employee management module
