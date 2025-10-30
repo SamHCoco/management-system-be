@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Management System BE - Build
 
 on:
   push:
