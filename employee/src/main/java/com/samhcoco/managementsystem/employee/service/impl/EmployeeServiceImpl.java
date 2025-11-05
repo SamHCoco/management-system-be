@@ -1,6 +1,7 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.record.EmployeeDto;
 import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<Employee> listAllEmployees(@NotNull com.samhcoco.managementsystem.core.model.Page page) {
-        return employeeRepository.findAll(page.toPageRequest());
+    public Page<EmployeeDto> listAllEmployees(@NotNull com.samhcoco.managementsystem.core.model.Page page) {
+        return employeeRepository.findAllWithDepartment(page.toPageRequest());
     }
 
     @Override

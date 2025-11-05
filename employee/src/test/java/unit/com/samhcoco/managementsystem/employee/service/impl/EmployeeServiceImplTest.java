@@ -1,6 +1,7 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.record.EmployeeDto;
 import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,19 +49,19 @@ public class EmployeeServiceImplTest {
     public void testListAllEmployees_happyPath() {
         com.samhcoco.managementsystem.core.model.Page customPage = new com.samhcoco.managementsystem.core.model.Page();
 
-        Page<Employee> expectedPage = new PageImpl<>(List.of(
-                Employee.builder().id(1L).firstName("John").lastName("Doe").build(),
-                Employee.builder().id(2L).firstName("Jane").lastName("Smith").build()
+        Page<EmployeeDto> expectedPage = new PageImpl<>(List.of(
+                new EmployeeDto(1L, "John", "Doe", "john.doe@email.com", "9998", "department"),
+                new EmployeeDto(2L, "Jane", "Smith", "jane.smith@email.com", "8889", "department")
         ));
 
-        when(employeeRepository.findAll(any(PageRequest.class))).thenReturn(expectedPage);
+        when(employeeRepository.findAllWithDepartment(any(PageRequest.class))).thenReturn(expectedPage);
 
-        Page<Employee> result = underTest.listAllEmployees(customPage);
+        Page<EmployeeDto> result = underTest.listAllEmployees(customPage);
 
         assertThat(result).isNotNull();
         assertThat(result.getContent().size()).isEqualTo(2);
 
-        verify(employeeRepository).findAll(any(PageRequest.class));
+        verify(employeeRepository).findAllWithDepartment(any(PageRequest.class));
     }
 
 }

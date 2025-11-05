@@ -1,6 +1,7 @@
 package com.samhcoco.managementsystem.employee.controller;
 
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.record.EmployeeDto;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -74,7 +75,7 @@ public class EmployeeController {
             pageClass.setSortDirection(sortDirection);
         }
 
-        Page<Employee> pageResult = employeeService.listAllEmployees(pageClass);
+        Page<EmployeeDto> pageResult = employeeService.listAllEmployees(pageClass);
         return ResponseEntity.ok(pageResult);
     }
 
