@@ -4,9 +4,10 @@ import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,6 +19,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("api/")
 @Tag(name = "Employee API", description = "Employee management APIs")
+@RequiredArgsConstructor
 public class EmployeeController {
 
     private static final String VERSION_1 = "v1";
@@ -26,13 +28,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeEntityValidator employeeEntityValidator;
 
-    @Autowired
-    public EmployeeController(EmployeeService employeeService,
-                              EmployeeEntityValidator employeeEntityValidator) {
-        this.employeeService = employeeService;
-        this.employeeEntityValidator = employeeEntityValidator;
-    }
-
+    @PreAuthorize("hasRole('admin')")
     @PostMapping(VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
@@ -44,6 +40,7 @@ public class EmployeeController {
                              .body(errors);
     }
 
+    @PreAuthorize("hasRole('admin')")
     @PutMapping(VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
@@ -55,6 +52,7 @@ public class EmployeeController {
                              .body(errors);
     }
 
+    @PreAuthorize("hasAnyRole('admin','user')")
     @GetMapping(VERSION_1 + "/" + EMPLOYEE + "/list-all")
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
                                                    @RequestParam(required = false) Integer size,

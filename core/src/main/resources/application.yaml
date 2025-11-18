@@ -18,6 +18,21 @@ spring:
     url: jdbc:mysql://${DB_URL}:3306/management_system
     user: ${DB_USER}
     password: ${DB_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: management_system
+            client-secret: ${KEYCLOAK_SECRET}
+            authorization-grant-type: client_credentials
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
 
 server:
   port: 9000
@@ -25,11 +40,9 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://{EUREKA_URL}:8761/eureka/
+      defaultZone: ${EUREKA_URL}:8761/eureka/
 
 app:
   errors:
     null-or-empty: "Field cannot be null or empty"
     entity-null: "Entity cannot be null"
-#    not-found: "Resource not found"
-#    invalid-direction: "Invalid sort direction: {0}"
