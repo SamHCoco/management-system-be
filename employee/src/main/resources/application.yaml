@@ -1,3 +1,6 @@
+server:
+  port: 9001
+
 spring:
   application:
     name: employee-service
@@ -34,20 +37,19 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
 
-server:
-  port: 9001
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  resource: ${KEYCLOAK_CLIENT}
+  username: ${KEYCLOAK_USER}
+  password: ${KEYCLOAK_PASSWORD}
+  grant-type: client_credentials
+  secret: ${KEYCLOAK_SECRET}
+  auth-server-url: ${KEYCLOAK_URL}
 
 eureka:
   client:
     service-url:
       defaultZone: http://${EUREKA_URL}:8761/eureka/
-
-springdoc:
-  api-docs:
-    path: /api-docs
-    enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
 
 error:
   messages:
@@ -56,3 +58,10 @@ error:
     field-value-set-prematurely: "Field value set prematurely"
     field-value-invalid: "Field value invalid"
     value-already-exists: "Field value already exists"
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
