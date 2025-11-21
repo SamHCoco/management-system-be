@@ -2,7 +2,7 @@ package com.samhcoco.managementsystem.core.service.impl;
 
 import com.samhcoco.managementsystem.core.model.keycloak.*;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
-import lombok.NonNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,8 +29,8 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
 @Slf4j
 @Service
+@Validated
 @RequiredArgsConstructor
-@Profile("!test") // fixme - issue with bean injection failing for integration test
 public class KeycloakServiceImpl implements KeycloakService {
 
     @Value("${keycloak.realm}")
@@ -88,7 +89,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity<KeycloakTokenInfo> getTokenInformation(@NonNull String accessToken) {
+    public ResponseEntity<KeycloakTokenInfo> getTokenInformation(@NotNull String accessToken) {
         val url = format("%srealms/%s/protocol/openid-connect/token/introspect", baseUrl, realm);
 
         val body = new LinkedMultiValueMap<String, String>();
@@ -112,7 +113,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public KeycloakUser create(@NonNull KeycloakUser user) {
+    public KeycloakUser create(@NotNull KeycloakUser user) {
         val url = format("%s/admin/realms/%s/users", baseUrl, realm);
 
         val token = getAdminAccessToken();
@@ -142,7 +143,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity<String> assignRoles(@NonNull String userId, @NonNull Set<String> roles) {
+    public ResponseEntity<String> assignRoles(@NotNull String userId, @NotNull Set<String> roles) {
         val url = format("%s/admin/realms/%s/users/%s/role-mappings/realm", baseUrl, realm, userId);
 
         val token = getAdminAccessToken();
@@ -165,7 +166,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public List<KeycloakRole> listAvailableRoles(@NonNull String userId) {
+    public List<KeycloakRole> listAvailableRoles(@NotNull String userId) {
         val url = format("%s/admin/realms/%s/users/%s/role-mappings/realm/available", baseUrl, realm, userId);
 
         val token = getAdminAccessToken();
@@ -188,7 +189,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity<String> delete(@NonNull String userId) {
+    public ResponseEntity<String> delete(@NotNull String userId) {
         val url = format("%s/admin/auth/admin/realms/projects/users/%s", baseUrl, userId);
 
         val token = getAdminAccessToken();
@@ -206,9 +207,9 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity<String> createUserAttribute(@NonNull String claimName,
-                                                      @NonNull String type,
-                                                      @NonNull String clientId) {
+    public ResponseEntity<String> createUserAttribute(@NotNull String claimName,
+                                                      @NotNull String type,
+                                                      @NotNull String clientId) {
         val mapper = new HashMap<String, Object>();
         mapper.put("name", claimName);
         mapper.put("protocol", "openid-connect");
@@ -261,7 +262,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public KeycloakUser getUser(@NonNull String id) {
+    public KeycloakUser getUser(@NotNull String id) {
         val url = format("%s/admin/realms/%s/users/%s", baseUrl, realm, id);
         val token = getAdminAccessToken();
 
@@ -278,7 +279,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public KeycloakUser updateUser(@NonNull KeycloakUser user) {
+    public KeycloakUser updateUser(@NotNull KeycloakUser user) {
         val url = format("%s/admin/realms/%s/users/%s", baseUrl, realm, user.getId());
         val token = getAdminAccessToken();
 

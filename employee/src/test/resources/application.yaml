@@ -26,6 +26,15 @@ spring:
           jwt:
             enabled: false
 
+keycloak:
+  realm: realm
+  resource: resource
+  username: user
+  password: password
+  grant-type: client_credentials
+  secret: secret
+  auth-server-url: http://localhost:8080
+
 eureka:
   client:
     enabled: false

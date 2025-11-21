@@ -18,8 +18,8 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("api/")
-@Tag(name = "Employee API", description = "Employee management APIs")
 @RequiredArgsConstructor
+@Tag(name = "Employee API", description = "Employee management APIs")
 public class EmployeeController {
 
     private static final String VERSION_1 = "v1";
@@ -33,11 +33,9 @@ public class EmployeeController {
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
         if (errors.isEmpty()) {
-            return ResponseEntity.status(CREATED)
-                                 .body(employeeService.create(employee));
+            return ResponseEntity.status(CREATED).body(employeeService.create(employee));
         }
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(errors);
+        return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasRole('admin')")
@@ -48,8 +46,7 @@ public class EmployeeController {
             return ResponseEntity.status(OK)
                                  .body(employeeService.create(employee));
         }
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(errors);
+        return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")

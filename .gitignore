@@ -35,6 +35,7 @@ build/
 .DS_Store
 DS_Store
 
-dev_dummy_data.sql
+dev_data.sql
 
 .env
+env.sh
