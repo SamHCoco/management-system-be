@@ -45,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public Employee create(@NotNull Employee employee) {
-        val created = employeeRepository.save(employee);
+        var created = employeeRepository.save(employee);
 
         val credentials = Credential.builder()
                                     .temporary(false)
@@ -71,9 +71,9 @@ public class EmployeeServiceImpl implements EmployeeService {
            throw new RuntimeException(error);
         }
 
-
-
-        return employeeRepository.save(employee);
+        created.setAuthID(keycloakUser.getId());
+        created = employeeRepository.save(employee);
+        return created;
     }
 
     @Override
