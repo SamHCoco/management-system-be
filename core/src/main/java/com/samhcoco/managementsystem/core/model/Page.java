@@ -14,9 +14,16 @@ import static java.util.Objects.nonNull;
 @NoArgsConstructor
 @Builder
 public class Page {
+    @Builder.Default
     private int page = 0;
+
+    @Builder.Default
     private int size = 20;
+
+    @Builder.Default
     private String sort = "id";
+
+    @Builder.Default
     private String sortDirection = PageSortDirection.ASC.toString();
 
     public PageRequest toPageRequest() {

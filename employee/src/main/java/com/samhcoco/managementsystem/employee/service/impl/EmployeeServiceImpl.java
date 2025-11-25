@@ -59,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                                     .lastName(employee.getLastName())
                                     .emailVerified(true)
                                     .enabled(true)
-                                    .attributes(Map.of("userId", String.valueOf(created.getId())))
+                                    .attributes(Map.of("userId", created.getId()))
                                     .credentials(List.of(credentials))
                                     .build();
 
