@@ -40,4 +40,12 @@ dev_dummy_data.sql
 env.sh
 dev_data.sql
 
-/certs
+# === mTLS / TLS ===
+*.key
+*.crt
+*.csr
+*.p12
+*.jks
+*.srl
+
+/certs/
