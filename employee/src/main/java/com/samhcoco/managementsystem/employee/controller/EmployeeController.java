@@ -38,7 +38,7 @@ public class EmployeeController {
         return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin','user')")
     @PutMapping(VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
