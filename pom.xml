@@ -39,7 +39,6 @@
 		<flyway.mysql.version>11.14.1</flyway.mysql.version>
 		<mysql.driver.version>9.4.0</mysql.driver.version>
 		<lombok.version>1.18.42</lombok.version>
-		<apache.commons.version>3.14.0</apache.commons.version>
 		<springdoc.version>2.8.13</springdoc.version>
 	</properties>
 	<dependencies>
@@ -146,12 +145,6 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 				<version>${lombok.version}</version>
-			</dependency>
-<!--			todo - remove-->
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>${apache.commons.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

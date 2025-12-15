@@ -3,6 +3,7 @@ package com.samhcoco.managementsystem.employee.service;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.Page;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.core.Authentication;
 
 public interface EmployeeService {
 
@@ -33,5 +34,9 @@ public interface EmployeeService {
      * @return Updated {@link Employee}.
      */
     Employee update(@NotNull Employee employee);
+
+
+    // todo - move this method to an AuthorizationService
+    boolean isAuthorized(Authentication authentication);
 
 }

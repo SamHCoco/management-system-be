@@ -1,6 +1,7 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.service.KeycloakService;
 import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,11 +27,14 @@ public class EmployeeServiceImplTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
+    @Mock
+    private KeycloakService keycloakService;
+
     private EmployeeServiceImpl underTest;
 
     @BeforeEach
     public void setup() {
-        underTest = new EmployeeServiceImpl(employeeRepository);
+        underTest = new EmployeeServiceImpl(employeeRepository, keycloakService);
     }
 
     @Test

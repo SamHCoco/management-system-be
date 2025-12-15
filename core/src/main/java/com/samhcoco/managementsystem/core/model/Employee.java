@@ -17,6 +17,9 @@ public class Employee extends Auditable {
     @Column(name = "id")
     private long id;
 
+    @Column(name = "auth_id")
+    private String authID;
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -26,8 +29,8 @@ public class Employee extends Auditable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "employee_department_id")
-    private long employeeDepartmentId;
+    @Column(name = "department_id")
+    private long departmentId;
 
     @Column(name = "email")
     private String email;
@@ -46,4 +49,7 @@ public class Employee extends Auditable {
 
     @Column(name = "address_post_code")
     private String addressPostCode;
+
+    @Transient
+    private String password;
 }

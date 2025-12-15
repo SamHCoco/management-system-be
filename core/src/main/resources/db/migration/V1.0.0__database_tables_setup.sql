@@ -11,7 +11,7 @@ create table if not exists `employee` (
     `first_name` varchar(255) not null,
     `middle_names` varchar(255),
     `last_name` varchar(255) not null,
-    `employee_department_id` bigint unsigned not null,
+    `department_id` bigint unsigned not null,
     `email` varchar(255) not null unique,
     `phone` varchar(20) not null unique,
     `address_first_line` varchar(255) not null,
@@ -21,5 +21,5 @@ create table if not exists `employee` (
     `created_at` datetime,
     `last_modified_at` datetime,
     primary key (id),
-    foreign key (`employee_department_id`) references `employee_department` (`id`)
+    foreign key (`department_id`) references `employee_department` (`id`)
 );
