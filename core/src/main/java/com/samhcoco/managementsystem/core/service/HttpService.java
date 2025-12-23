@@ -10,6 +10,10 @@ public interface HttpService {
 
     <T> Object get(String url, Class<T> responseType, Map<String, String> headers);
 
-    <T> Object get(String url, Class<T> responseType, int retries, Duration timeout);
+    <T> Object get(String url,
+                   Class<T> responseType,
+                   Map<String, String> headers,
+                   int retries,
+                   Duration timeout);
 
 }
