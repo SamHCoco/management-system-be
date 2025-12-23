@@ -12,6 +12,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class BeanConfiguration {
 
+    // todo - configure timeout
     @Bean
     public RestClient restClient() {
         return RestClient.builder().build();
