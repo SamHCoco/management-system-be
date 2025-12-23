@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
@@ -13,8 +13,8 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 public class BeanConfiguration {
 
     @Bean
-    public WebClient webClient() {
-        return WebClient.builder().build();
+    public RestClient restClient() {
+        return RestClient.builder().build();
     }
 
     @Bean
