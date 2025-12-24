@@ -47,7 +47,11 @@ public class HttpServiceImpl implements HttpService {
         int attempts = 0;
         while (attempts <= retries) {
             try {
-                response = getRequest(url, headers);
+                response = restClient.get()
+                                     .uri(url)
+                                     .headers(h -> h.setAll(headers != null ? headers : Map.of()))
+                                     .retrieve()
+                                     .body(String.class);
                 return objectMapper.readValue(response, responseType);
             } catch (RestClientException | JsonProcessingException e) {
                 attempts++;
@@ -58,19 +62,5 @@ public class HttpServiceImpl implements HttpService {
         }
         error.getErrors().put(HTTP_SERVICE, errorMessage);
         return error;
-    }
-
-    /**
-     * Executes Http GET request for given URL.
-     * @param url Http URL
-     * @param headers Http Headers
-     * @return {@link String} response body
-     */
-    private String getRequest(@NonNull String url, Map<String, String> headers) {
-        return restClient.get()
-                         .uri(url)
-                         .headers(h -> h.setAll(headers != null ? headers : Map.of()))
-                         .retrieve()
-                         .body(String.class);
     }
 }
