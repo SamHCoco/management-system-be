@@ -52,6 +52,8 @@ public class HttpServiceImpl implements HttpService {
                                      .headers(h -> h.setAll(headers != null ? headers : Map.of()))
                                      .retrieve()
                                      .body(String.class);
+
+                if (responseType == String.class) return response;
                 return objectMapper.readValue(response, responseType);
             } catch (RestClientException | JsonProcessingException e) {
                 attempts++;
