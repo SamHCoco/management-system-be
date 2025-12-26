@@ -39,7 +39,7 @@ spring:
 
 keycloak:
   realm: ${KEYCLOAK_REALM}
-  resource: ${KEYCLOAK_CLIENT}
+  client: ${KEYCLOAK_CLIENT}
   username: ${KEYCLOAK_USER}
   password: ${KEYCLOAK_PASSWORD}
   grant-type: client_credentials

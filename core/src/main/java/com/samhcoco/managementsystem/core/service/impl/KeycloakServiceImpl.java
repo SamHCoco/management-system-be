@@ -35,10 +35,10 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Value("${keycloak.realm}")
     private String realm;
 
-    @Value("${keycloak.resource}")
+    @Value("${keycloak.client}")
     private String clientName;
 
-    @Value("${keycloak.username}")
+    @Value("${keycloak.user}")
     private String username;
 
     @Value("${keycloak.password}")
