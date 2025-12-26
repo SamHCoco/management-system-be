@@ -1,3 +1,6 @@
+server:
+  port: 9003
+
 spring:
   application:
     name: product-service
@@ -19,9 +22,6 @@ spring:
     user: ${DB_USER}
     password: ${DB_PASSWORD}
 
-server:
-  port: 9002
-
 eureka:
   client:
     service-url:
@@ -41,5 +41,3 @@ error:
     field-value-set-prematurely: "Field value set prematurely"
     field-value-invalid: "Field value invalid"
     value-already-exists: "Field value already exists"
-#    not-found: "Resource not found"
-#    invalid-direction: "Invalid sort direction: {0}"

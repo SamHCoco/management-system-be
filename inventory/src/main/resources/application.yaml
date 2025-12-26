@@ -1,9 +1,9 @@
 server:
-  port: 9000
+  port: 9002
 
 spring:
   application:
-    name: core-service
+    name: inventory-service
   output:
     ansi:
       enabled: ALWAYS
@@ -49,9 +49,19 @@ keycloak:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL}:8761/eureka/
+      defaultZone: http://${EUREKA_URL}:8761/eureka/
 
-app:
-  errors:
+error:
+  messages:
     null-or-empty: "Field cannot be null or empty"
     entity-null: "Entity cannot be null"
+    field-value-set-prematurely: "Field value set prematurely"
+    field-value-invalid: "Field value invalid"
+    value-already-exists: "Field value already exists"
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
