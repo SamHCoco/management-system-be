@@ -38,3 +38,4 @@ dev_dummy_data.sql
 .env
 dev_data.sql
 env.sh
+/certs
