@@ -34,8 +34,14 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
 
-server:
-  port: 9000
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  client: ${KEYCLOAK_CLIENT}
+  username: ${KEYCLOAK_USER}
+  password: ${KEYCLOAK_PASSWORD}
+  grant-type: client_credentials
+  secret: ${KEYCLOAK_SECRET}
+  auth-server-url: ${KEYCLOAK_URL}
 
 eureka:
   client:
@@ -46,3 +52,6 @@ app:
   errors:
     null-or-empty: "Field cannot be null or empty"
     entity-null: "Entity cannot be null"
+
+server:
+  port: 9000
