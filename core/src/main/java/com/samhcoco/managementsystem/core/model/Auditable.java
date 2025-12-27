@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -17,19 +17,19 @@ import java.util.Date;
 public class Auditable {
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     @Column(name = "last_modified_at")
-    private Date lastModifiedAt;
+    private Instant lastModifiedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
+        createdAt = Instant.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        lastModifiedAt = new Date();
+        lastModifiedAt = Instant.now();
     }
 
 }

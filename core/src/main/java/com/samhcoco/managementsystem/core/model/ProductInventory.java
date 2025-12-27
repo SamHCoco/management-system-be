@@ -1,0 +1,28 @@
+package com.samhcoco.managementsystem.core.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "product_inventory")
+public class ProductInventory extends Auditable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
+
+    @Column(name = "product_id")
+    private long productId;
+
+    @Column(name = "quantity")
+    private long quantity;
+
+    @Column(name = "deleted")
+    private boolean deleted;
+}
