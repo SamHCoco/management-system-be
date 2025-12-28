@@ -1,11 +1,9 @@
 package com.samhcoco.managementsystem.core.model;
 
+import com.samhcoco.managementsystem.core.enums.PageSortDirection;
 import lombok.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import static java.util.Objects.nonNull;
 
 @Getter
 @Setter

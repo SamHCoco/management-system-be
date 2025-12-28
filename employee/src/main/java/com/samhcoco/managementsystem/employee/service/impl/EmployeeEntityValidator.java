@@ -127,7 +127,7 @@ public class EmployeeEntityValidator extends AbstractEntityValidator<Employee, L
             errors.put(PHONE, getErrorMessages().getNullOrEmpty());
         }
 
-        if (entity.getEmployeeDepartmentId() == 0) {
+        if (entity.getDepartmentId() == 0) {
             errors.put(EMPLOYEE_DEPARTMENT_ID, getErrorMessages().getFieldValueInvalid());
         }
 

@@ -1,6 +1,4 @@
-package com.samhcoco.managementsystem.core.model;
-
-import org.apache.commons.lang3.StringUtils;
+package com.samhcoco.managementsystem.core.enums;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 

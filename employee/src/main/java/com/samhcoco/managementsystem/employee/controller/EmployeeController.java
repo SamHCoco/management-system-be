@@ -1,21 +1,16 @@
 package com.samhcoco.managementsystem.employee.controller;
 
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.Error;
-import com.samhcoco.managementsystem.core.service.HttpService;
+import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
 import java.util.Map;
 
 import static java.util.Objects.nonNull;
@@ -28,14 +23,13 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class EmployeeController {
 
-    private static final String VERSION_1 = "v1";
     private static final String EMPLOYEE = "employee";
 
     private final EmployeeService employeeService;
     private final EmployeeEntityValidator employeeEntityValidator;
 
     @PreAuthorize("hasRole('admin')")
-    @PostMapping(VERSION_1 + "/" + EMPLOYEE)
+    @PostMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
         if (errors.isEmpty()) {
@@ -47,7 +41,7 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @PutMapping(VERSION_1 + "/" + EMPLOYEE)
+    @PutMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
         if (errors.isEmpty()) {
@@ -59,7 +53,7 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")
-    @GetMapping(VERSION_1 + "/" + EMPLOYEE + "/list-all")
+    @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
                                                    @RequestParam(required = false) Integer size,
                                                    @RequestParam(required = false) String sort,
