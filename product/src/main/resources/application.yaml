@@ -21,18 +21,35 @@ spring:
     url: jdbc:mysql://${DB_URL}:3306/management_system
     user: ${DB_USER}
     password: ${DB_PASSWORD}
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: management_system
+            client-secret: ${KEYCLOAK_SECRET}
+            authorization-grant-type: client_credentials
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}
+
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  client: ${KEYCLOAK_CLIENT}
+  username: ${KEYCLOAK_USER}
+  password: ${KEYCLOAK_PASSWORD}
+  grant-type: client_credentials
+  secret: ${KEYCLOAK_SECRET}
+  auth-server-url: ${KEYCLOAK_URL}
 
 eureka:
   client:
     service-url:
       defaultZone: http://${EUREKA_URL}:8761/eureka/
-
-springdoc:
-  api-docs:
-    path: /api-docs
-    enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
 
 error:
   messages:
@@ -41,3 +58,10 @@ error:
     field-value-set-prematurely: "Field value set prematurely"
     field-value-invalid: "Field value invalid"
     value-already-exists: "Field value already exists"
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
