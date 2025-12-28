@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductInventoryRepository extends JpaRepository<ProductInventory, Long> {
     ProductInventory findById(long id);
-    ProductInventory findByProductIdAndDeletedFalse(long productId);
+    boolean existsByProductIdAndDeletedFalse(long ProductId);
 }

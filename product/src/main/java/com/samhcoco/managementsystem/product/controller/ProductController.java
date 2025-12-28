@@ -27,12 +27,16 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody ProductDto productDto,
                                            @RequestParam long quantity) {
         try {
-            // todo - extend AbstractEntityValidator to create validation service
+            // todo - extend AbstractEntityValidator to create validation service for product
             final Product created = productService.create(productDto.toProduct(), quantity);
-            return ResponseEntity.status(CREATED).body(created.toDto());
+
+            return ResponseEntity.status(CREATED)
+                                 .body(created.toDto());
         } catch(Exception e) {
             log.error("Failed to create {}: {}", productDto, e.getMessage());
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                                 .body(e.getMessage());
         }
     }
 

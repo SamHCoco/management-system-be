@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.nonNull;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,8 +19,7 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 
     @Override
     public ProductInventory create(@NonNull Product product, @NonNull Long quantity) {
-        final ProductInventory existingInventory = productInventoryRepository.findByProductIdAndDeletedFalse(product.getId());
-        if (nonNull(existingInventory)) {
+        if (productInventoryRepository.existsByProductIdAndDeletedFalse(product.getId())) {
             final String error = String.format("Failed to create ProductInventory for %s: " +
                                  "ProductInventory with Product ID '%s' already exists.", product, product.getId());
             log.error(error);
