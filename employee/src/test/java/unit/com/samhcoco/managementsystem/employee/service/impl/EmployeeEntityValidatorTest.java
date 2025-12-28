@@ -64,7 +64,7 @@ public class EmployeeEntityValidatorTest {
                                            .id(1)
                                            .firstName(" ")
                                            .email("")
-                                           .employeeDepartmentId(0)
+                                           .departmentId(0)
                                            .addressFirstLine("")
                                            .build();
 
@@ -143,7 +143,7 @@ public class EmployeeEntityValidatorTest {
     public void testValidateUpdate_fail_allFieldsInvalid() {
         Employee invalid = Employee.builder()
                                    .id(0)
-                                   .employeeDepartmentId(0)
+                                   .departmentId(0)
                                    .firstName("")
                                    .email(" ")
                                    .phone(" ")
@@ -204,7 +204,7 @@ public class EmployeeEntityValidatorTest {
                 .lastName("Smith")
                 .email("john.h.smith@yopmail.com")
                 .phone("+44-20-7946-0958")
-                .employeeDepartmentId(1L)
+                .departmentId(1L)
                 .addressFirstLine("123 Main St")
                 .addressCity("London")
                 .addressPostCode("W1D 1NU")

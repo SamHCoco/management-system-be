@@ -1,35 +1,36 @@
 package com.samhcoco.managementsystem.core.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Auditable {
+@MappedSuperclass
+public abstract class Auditable {
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private Instant createdAt;
 
     @Column(name = "last_modified_at")
-    private Date lastModifiedAt;
+    private Instant lastModifiedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
+        if (createdAt == null && lastModifiedAt == null) {
+            final Instant now = Instant.now();
+            createdAt = now;
+            lastModifiedAt = now;
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
-        lastModifiedAt = new Date();
+        lastModifiedAt = Instant.now();
     }
 
 }

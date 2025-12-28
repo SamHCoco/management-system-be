@@ -26,8 +26,8 @@ public class Employee extends Auditable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "employee_department_id")
-    private long employeeDepartmentId;
+    @Column(name = "department_id")
+    private long departmentId;
 
     @Column(name = "email")
     private String email;
