@@ -34,6 +34,9 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
                                                .quantity(quantity)
                                                .build();
 
+        productInventory.setCreatedAt(product.getCreatedAt());
+        productInventory.setLastModifiedAt(product.getLastModifiedAt());
+
         return productInventoryRepository.save(productInventory);
     }
 }

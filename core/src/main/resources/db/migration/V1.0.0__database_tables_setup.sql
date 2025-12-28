@@ -26,7 +26,8 @@ create table if not exists `employee` (
 
 create table if not exists `product` (
     `id` bigint unsigned auto_increment not null,
-    `name` varchar(255) not null unique,
+    `name` varchar(255) not null,
+    `price` decimal(9,2) not null,
     `created_at` datetime,
     `last_modified_at` datetime,
     `deleted` boolean not null default 0,
