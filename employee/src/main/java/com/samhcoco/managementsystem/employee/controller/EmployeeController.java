@@ -29,7 +29,7 @@ public class EmployeeController {
     private final EmployeeEntityValidator employeeEntityValidator;
 
     @PreAuthorize("hasRole('admin')")
-    @PostMapping(ApiVersion.V1 + "/" + EMPLOYEE)
+    @PostMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
         if (errors.isEmpty()) {
@@ -41,7 +41,7 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @PutMapping(ApiVersion.V1 + "/" + EMPLOYEE)
+    @PutMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
         if (errors.isEmpty()) {
@@ -53,7 +53,7 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")
-    @GetMapping(ApiVersion.V1 + "/" + EMPLOYEE)
+    @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
                                                    @RequestParam(required = false) Integer size,
                                                    @RequestParam(required = false) String sort,

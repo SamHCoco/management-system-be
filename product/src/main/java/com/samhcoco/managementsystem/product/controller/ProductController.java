@@ -26,13 +26,14 @@ public class ProductController {
     private final ProductService productService;
     private final OrderService orderService;
 
-    @PostMapping(ApiVersion.V1 + "/" + PRODUCT + "/orders")
+    @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
     public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
         // todo - extend AbstractEntityValidator to create validation service
         return null;
+
     }
 
-    @PostMapping(ApiVersion.V1 + "/" + PRODUCT)
+    @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT)
     public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto,
                                                 @RequestParam int stockQuantity) {
         try {
