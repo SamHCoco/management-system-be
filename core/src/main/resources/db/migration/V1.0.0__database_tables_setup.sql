@@ -37,7 +37,9 @@ create table if not exists `product` (
 create table if not exists `product_inventory` (
     `id` bigint unsigned auto_increment not null,
     `product_id` bigint unsigned not null,
-    `quantity` bigint unsigned not null,
+    `stock` int unsigned not null,
+    `low_stock_threshold` int unsigned not null,
+    `low_stock_alerted` boolean not null default 0,
     `created_at` datetime,
     `last_modified_at` datetime,
     `deleted` boolean not null default 0,

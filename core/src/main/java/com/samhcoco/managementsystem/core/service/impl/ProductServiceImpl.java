@@ -21,9 +21,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product create(@NonNull Product product, @NonNull Long quantity) {
+    public Product create(@NonNull Product product, @NonNull Integer stockQuantity) {
         final Product created = productRepository.save(product);
-        final ProductInventory productInventory = productInventoryService.create(product, quantity);
+        final ProductInventory productInventory = productInventoryService.create(product, stockQuantity);
         return product;
     }
 }
