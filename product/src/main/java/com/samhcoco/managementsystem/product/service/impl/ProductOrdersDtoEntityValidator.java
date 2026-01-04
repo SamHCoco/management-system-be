@@ -66,8 +66,6 @@ public class ProductOrdersDtoEntityValidator implements CreateEntityValidator<Pr
             return failureReasons;
         }
 
-        // todo - do validation product inventory
-
         return failureReasons;
     }
 }
