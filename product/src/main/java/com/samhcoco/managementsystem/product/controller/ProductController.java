@@ -41,14 +41,13 @@ public class ProductController {
 
         // todo - complete
         return null;
-
     }
 
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT)
     public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto,
                                                 @RequestParam int stockQuantity) {
         try {
-            // todo - extend AbstractEntityValidator to create validation service for product
+            // todo - extend CreateEntityValidator to create validation service for product
             final Product created = productService.create(productDto.toProduct(), stockQuantity);
 
             return ResponseEntity.status(CREATED)
