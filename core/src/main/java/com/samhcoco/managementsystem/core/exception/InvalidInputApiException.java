@@ -9,9 +9,9 @@ import java.util.Map;
 @Setter
 public class InvalidInputApiException extends RuntimeException {
     private String message;
-    private Map<String, Object> errors;
+    private Map<String, String> errors;
 
-    public InvalidInputApiException(String message, Map<String, Object> errors) {
+    public InvalidInputApiException(String message, Map<String, String> errors) {
         super(message);
         this.errors = errors;
     }

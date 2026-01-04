@@ -9,6 +9,7 @@ import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import static java.util.Objects.isNull;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Service
 public class ProductOrdersDtoEntityValidator implements CreateEntityValidator<ProductOrdersDto, Long> {
 
     private final JpaRepositoryService jpaRepositoryService;

@@ -1,11 +1,13 @@
 package com.samhcoco.managementsystem.product.controller;
 
+import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
 import com.samhcoco.managementsystem.product.service.OrderService;
+import com.samhcoco.managementsystem.product.service.impl.ProductOrdersDtoEntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import java.util.Map;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestController
@@ -25,10 +28,18 @@ public class ProductController {
 
     private final ProductService productService;
     private final OrderService orderService;
+    private final ProductOrdersDtoEntityValidator productOrdersDtoEntityValidator;
 
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
     public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
-        // todo - extend AbstractEntityValidator to create validation service
+        final Map<String, String> failureReasons = productOrdersDtoEntityValidator.validateCreate(productOrdersDto);
+
+        if (!failureReasons.isEmpty()) {
+            log.error("Failed to create Product Order for {}: {}", productOrdersDto, failureReasons);
+            throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
+        }
+
+        // todo - complete
         return null;
 
     }

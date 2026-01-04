@@ -11,6 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Error {
-    private Map<String, Object> errors;
+    private Map<String, String> errors;
     private String exception;
 }

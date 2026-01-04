@@ -7,9 +7,9 @@ import java.util.Map;
 @Getter
 public class OutOfStockException extends RuntimeException {
     private String message;
-    private Map<String, Object> errors;
+    private Map<String, String> errors;
 
-    public OutOfStockException(String message, Map<String, Object> errors) {
+    public OutOfStockException(String message, Map<String, String> errors) {
         super(message);
         this.errors = errors;
     }
