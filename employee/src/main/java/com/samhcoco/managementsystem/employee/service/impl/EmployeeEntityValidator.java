@@ -3,7 +3,7 @@ package com.samhcoco.managementsystem.employee.service.impl;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.errorMessages;
 import com.samhcoco.managementsystem.core.service.AbstractEntityValidator;
-import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

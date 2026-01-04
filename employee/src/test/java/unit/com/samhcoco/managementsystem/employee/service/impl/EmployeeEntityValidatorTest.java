@@ -2,7 +2,7 @@ package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.errorMessages;
-import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.employee.repository;
+package com.samhcoco.managementsystem.core.repository;
 
 import com.samhcoco.managementsystem.core.model.Employee;
 
