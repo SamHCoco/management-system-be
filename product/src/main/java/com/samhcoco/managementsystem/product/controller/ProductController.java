@@ -1,10 +1,12 @@
 package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
+import com.samhcoco.managementsystem.core.exception.JwtUserIdClaimException;
 import com.samhcoco.managementsystem.core.model.Order;
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.dto.OrderDto;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
+import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
@@ -13,6 +15,7 @@ import com.samhcoco.managementsystem.product.service.impl.ProductOrdersDtoEntity
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+import static com.samhcoco.managementsystem.core.service.impl.AuthServiceImpl.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
@@ -31,19 +35,26 @@ public class ProductController {
 
     private final ProductService productService;
     private final OrderService orderService;
+    private final AuthService authService;
     private final ProductOrdersDtoEntityValidator productOrdersDtoEntityValidator;
 
+    @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto,
-                                               @RequestParam Long userId) {
+    public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
         final Map<String, String> failureReasons = productOrdersDtoEntityValidator.validateCreate(productOrdersDto);
 
-        // fixme - get user ID from token claim
         if (!failureReasons.isEmpty()) {
             log.error("Failed to create Product Order for {}: {}", productOrdersDto, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
-        
+
+        final long userId = authService.getJwtUserIdClaim();
+
+        if (userId == 0) {
+            final String error = String.format(USER_ID_CLAIM_ERROR, USER_ID);
+            throw new JwtUserIdClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
+        }
+
         final List<OrderDto> orderDtos = orderService.create(productOrdersDto, userId).stream()
                                                                                       .map(Order::toDto)
                                                                                       .toList();
