@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.core.model;
 
-import com.samhcoco.managementsystem.core.model.dto.OrderDto;
+import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-@Entity(name = "order")
-public class Order extends Auditable {
+@Entity(name = "product_order")
+public class ProductOrder extends Auditable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,11 @@ public class Order extends Auditable {
     @Column(name = "user_id")
     private long userId;
 
-    public OrderDto toDto() {
-        return OrderDto.builder()
+    @Column(name = "status")
+    private String status;
+
+    public ProductOrderDto toDto() {
+        return ProductOrderDto.builder()
                        .id(id)
                        .productId(productId)
                        .userId(userId)

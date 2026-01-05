@@ -5,7 +5,7 @@ import com.samhcoco.managementsystem.core.repository.ProductRepository;
 import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
 import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,41 +23,41 @@ import static java.util.Objects.isNull;
 @Setter
 @RequiredArgsConstructor
 @Service
-public class ProductOrdersDtoEntityValidator implements CreateEntityValidator<ProductOrdersDto, Long> {
+public class ProductOrdersDtoEntityValidator implements CreateEntityValidator<ProductOrderListDto, Long> {
 
-    private final JpaRepositoryService jpaRepositoryService;
+    private final JpaRepositoryService repositoryService;
 
     @Override
-    public Map<String, String> validateCreate(ProductOrdersDto entity) {
-        final Map<String, String> failureReasons = new HashMap<String, String>();
+    public Map<String, String> validateCreate(ProductOrderListDto entity) {
+        final Map<String, String> failureReasons = new HashMap<>();
 
         if (isNull(entity)) {
             failureReasons.put("Entity", "Entity cannot be null");
             return failureReasons;
         }
 
-        final List<ProductOrderDto> productOrders = entity.getOrders();
-        if (isNull(productOrders)) {
+        final List<ProductOrderDto> orders = entity.getOrders();
+        if (isNull(orders)) {
             failureReasons.put("ProductOrderDto", "ProductOrderDto cannot be null");
             return failureReasons;
         }
 
-        final Set<Long> productIds = productOrders.stream()
-                                                  .map(ProductOrderDto::getProductId)
-                                                  .filter(productId -> productId != 0)
-                                                  .collect(Collectors.toSet());
+        final Set<Long> productIds = orders.stream()
+                                           .map(ProductOrderDto::getProductId)
+                                           .filter(productId -> productId != 0)
+                                           .collect(Collectors.toSet());
 
         if (productIds.isEmpty()) {
             failureReasons.put("productId", "Product IDs invalid");
             return failureReasons;
         }
 
-        if (productIds.size() != productOrders.size()) {
+        if (productIds.size() != orders.size()) {
             failureReasons.put("productId", "Some invalid Product IDs were supplied");
             return failureReasons;
         }
 
-        final ProductRepository productRepository = jpaRepositoryService.getRepository(Product.class);
+        final ProductRepository productRepository = repositoryService.getRepository(Product.class);
         if (isNull(productRepository)) {
             failureReasons.put("productRepository", String.format("Internal Error - failed to find JpaRepository for Class: '%s'", Product.class));
             return failureReasons;

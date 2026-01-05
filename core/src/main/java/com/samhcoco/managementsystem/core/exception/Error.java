@@ -4,6 +4,10 @@ import lombok.*;
 
 import java.util.Map;
 
+/**
+ * Data transfer object defining a consistent error response
+ * format for all Controller REST APIs.
+ */
 @Getter
 @Setter
 @ToString

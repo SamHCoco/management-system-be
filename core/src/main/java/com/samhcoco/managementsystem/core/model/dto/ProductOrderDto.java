@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.core.model.dto;
 
-import com.samhcoco.managementsystem.core.model.Order;
+import com.samhcoco.managementsystem.core.model.ProductOrder;
 import lombok.*;
 
 
@@ -11,18 +11,16 @@ import lombok.*;
 @ToString
 @Builder
 @EqualsAndHashCode
-public class OrderDto {
+public class ProductOrderDto {
     private long id;
     private long productId;
     private long quantity;
-    private long userId;
 
-    public Order toOrder() {
-        return Order.builder()
+    public ProductOrder toProductOrder() {
+        return ProductOrder.builder()
                     .id(id)
                     .productId(productId)
                     .quantity(quantity)
-                    .userId(userId)
                     .build();
     }
 }

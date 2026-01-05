@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ProductOrdersDto {
+public class ProductOrderListDto {
     private List<ProductOrderDto> orders;
 }

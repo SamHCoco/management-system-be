@@ -49,7 +49,7 @@ keycloak:
 eureka:
   client:
     service-url:
-      defaultZone: http://${EUREKA_URL}:8761/eureka/
+      defaultZone: ${EUREKA_URL}:8761/eureka/
 
 error:
   messages:

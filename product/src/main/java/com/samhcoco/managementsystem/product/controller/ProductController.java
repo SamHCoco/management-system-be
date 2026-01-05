@@ -2,15 +2,15 @@ package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
 import com.samhcoco.managementsystem.core.exception.JwtUserIdClaimException;
-import com.samhcoco.managementsystem.core.model.Order;
 import com.samhcoco.managementsystem.core.model.Product;
-import com.samhcoco.managementsystem.core.model.dto.OrderDto;
+import com.samhcoco.managementsystem.core.model.ProductOrder;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
+import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
-import com.samhcoco.managementsystem.product.service.OrderService;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
+import com.samhcoco.managementsystem.product.service.ProductOrderService;
 import com.samhcoco.managementsystem.product.service.impl.ProductOrdersDtoEntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,34 +34,33 @@ public class ProductController {
     private static final String PRODUCT = "product";
 
     private final ProductService productService;
-    private final OrderService orderService;
+    private final ProductOrderService productOrderService;
     private final AuthService authService;
-    private final ProductOrdersDtoEntityValidator productOrdersDtoEntityValidator;
+    private final ProductOrdersDtoEntityValidator productOrdersDtoValidator;
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<List<OrderDto>> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
-        final Map<String, String> failureReasons = productOrdersDtoEntityValidator.validateCreate(productOrdersDto);
+    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderListDto productOrderListDto) {
+        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderListDto);
 
         if (!failureReasons.isEmpty()) {
-            log.error("Failed to create Product Order for {}: {}", productOrdersDto, failureReasons);
+            log.error("Failed to create Product Order for {}: {}", productOrderListDto, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
 
         final long userId = authService.getJwtUserIdClaim();
-
         if (userId == 0) {
             final String error = String.format(USER_ID_CLAIM_ERROR, USER_ID);
             throw new JwtUserIdClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
         }
 
-        final List<OrderDto> orderDtos = orderService.create(productOrdersDto, userId).stream()
-                                                                                      .map(Order::toDto)
-                                                                                      .toList();
-        return ResponseEntity.status(CREATED)
-                             .body(orderDtos);
+        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderListDto, userId).stream()
+                                                                                                    .map(ProductOrder::toDto)
+                                                                                                    .toList();
+        return ResponseEntity.status(CREATED).body(orderDtos);
     }
 
+    // todo - restrict to admin role
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT)
     public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto,
                                                 @RequestParam int stockQuantity) {
@@ -69,13 +68,11 @@ public class ProductController {
             // todo - extend CreateEntityValidator to create validation service for product
             final Product created = productService.create(productDto.toProduct(), stockQuantity);
 
-            return ResponseEntity.status(CREATED)
-                                 .body(created.toDto());
+            return ResponseEntity.status(CREATED).body(created.toDto());
         } catch(Exception e) {
             log.error("Failed to create {}: {}", productDto, e.getMessage());
 
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                                 .body(e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

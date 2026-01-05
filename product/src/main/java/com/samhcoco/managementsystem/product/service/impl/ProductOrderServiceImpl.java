@@ -2,13 +2,13 @@ package com.samhcoco.managementsystem.product.service.impl;
 
 import com.samhcoco.managementsystem.core.enums.MessageType;
 import com.samhcoco.managementsystem.core.exception.OutOfStockException;
-import com.samhcoco.managementsystem.core.model.Order;
+import com.samhcoco.managementsystem.core.model.ProductOrder;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
 import com.samhcoco.managementsystem.core.model.ProductInventoryAlert;
 import com.samhcoco.managementsystem.core.repository.OrderRepository;
 import com.samhcoco.managementsystem.core.repository.ProductInventoryRepository;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrdersDto;
-import com.samhcoco.managementsystem.product.service.OrderService;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
+import com.samhcoco.managementsystem.product.service.ProductOrderService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,54 +20,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.samhcoco.managementsystem.core.enums.OrderStatus.PENDING;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class ProductOrderServiceImpl implements ProductOrderService {
 
     private final OrderRepository orderRepository;
     private final ProductInventoryRepository productInventoryRepository;
 
     @Override
     @Transactional
-    public List<Order> create(@NonNull ProductOrdersDto productOrdersDto, long userId) {
+    public List<ProductOrder> create(@NonNull ProductOrderListDto productOrderListDto, long userId) {
         final Map<Long, Integer> productIdsAndQuantities = new HashMap<>();
 
-        productOrdersDto.getOrders().forEach(o -> {
+        productOrderListDto.getOrders().forEach(o -> {
             productIdsAndQuantities.put(o.getProductId(), o.getQuantity());
         });
 
-        final List<ProductInventory> productInventory = productInventoryRepository.findAllByProductIdInAndDeletedFalse(productIdsAndQuantities.keySet());
+        final List<ProductInventory> inventory = productInventoryRepository.findAllByProductIdInAndDeletedFalse(productIdsAndQuantities.keySet());
 
-        final List<Order> orders = new ArrayList<>();
+        final List<ProductOrder> orders = new ArrayList<>();
         final List<ProductInventoryAlert> alerts = new ArrayList<>();
 
-        productInventory.forEach(p -> {
-            if (p.getStock() < 1) {
+        inventory.forEach(i -> {
+            if (i.getStock() == 0) {
                 throw new OutOfStockException("Out Of Stock",
-                                       Map.of("product", String.format("Failed to complete order: product with ID '%s' out of stock", p.getProductId())));
+                                       Map.of("product", String.format("Failed to complete order: product with ID '%s' out of stock", i.getProductId())));
             }
 
-            p.setStock(p.getStock() - 1);
+            i.setStock(i.getStock() - 1);
 
-            if (p.getStock() <= p.getLowStockThreshold() && p.isLowStockAlerted() == false) {
+            if (i.getStock() <= i.getLowStockThreshold() && i.isLowStockAlerted() == false) {
                 alerts.add(ProductInventoryAlert.builder()
-                                                .productId(p.getProductId())
-                                                .stock(p.getStock())
-                                                .lowStockThreshold(p.getLowStockThreshold())
+                                                .productId(i.getProductId())
+                                                .stock(i.getStock())
+                                                .lowStockThreshold(i.getLowStockThreshold())
                                                 .messageType(MessageType.PRODUCT_INVENTORY_ALERT)
                                                 .build());
-                p.setLowStockAlerted(true);
+                i.setLowStockAlerted(true);
             }
 
-            orders.add(Order.builder()
-                            .productId(p.getProductId())
-                            .quantity(productIdsAndQuantities.get(p.getProductId()))
+            orders.add(ProductOrder.builder()
+                            .productId(i.getProductId())
+                            .quantity(productIdsAndQuantities.get(i.getProductId()))
                             .userId(userId)
+                            .status(PENDING.name())
                             .build());
         });
 
-        productInventoryRepository.saveAll(productInventory);
+        productInventoryRepository.saveAll(inventory);
         // todo - send low stock inventory message
         return orderRepository.saveAll(orders);
     }
