@@ -1,7 +1,9 @@
 package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
+import com.samhcoco.managementsystem.core.model.Order;
 import com.samhcoco.managementsystem.core.model.Product;
+import com.samhcoco.managementsystem.core.model.dto.OrderDto;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
@@ -31,16 +34,21 @@ public class ProductController {
     private final ProductOrdersDtoEntityValidator productOrdersDtoEntityValidator;
 
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
+    public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto,
+                                               @RequestParam Long userId) {
         final Map<String, String> failureReasons = productOrdersDtoEntityValidator.validateCreate(productOrdersDto);
 
+        // fixme - get user ID from token claim
         if (!failureReasons.isEmpty()) {
             log.error("Failed to create Product Order for {}: {}", productOrdersDto, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
-
-        // todo - complete
-        return null;
+        
+        final List<OrderDto> orderDtos = orderService.create(productOrdersDto, userId).stream()
+                                                                                      .map(Order::toDto)
+                                                                                      .toList();
+        return ResponseEntity.status(CREATED)
+                             .body(orderDtos);
     }
 
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT)

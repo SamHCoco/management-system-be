@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.core.model;
 
+import com.samhcoco.managementsystem.core.model.dto.OrderDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,4 +25,13 @@ public class Order extends Auditable {
 
     @Column(name = "user_id")
     private long userId;
+
+    public OrderDto toDto() {
+        return OrderDto.builder()
+                       .id(id)
+                       .productId(productId)
+                       .userId(userId)
+                       .quantity(quantity)
+                       .build();
+    }
 }
