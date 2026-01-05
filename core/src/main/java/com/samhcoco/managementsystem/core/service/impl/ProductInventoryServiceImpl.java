@@ -18,7 +18,7 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     private final ProductInventoryRepository productInventoryRepository;
 
     @Override
-    public ProductInventory create(@NonNull Product product, @NonNull Long quantity) {
+    public ProductInventory create(@NonNull Product product, @NonNull Integer stock) {
         if (productInventoryRepository.existsByProductIdAndDeletedFalse(product.getId())) {
             final String error = String.format("Failed to create ProductInventory for %s: " +
                                  "ProductInventory with Product ID '%s' already exists.", product, product.getId());
@@ -28,11 +28,8 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 
         val productInventory = ProductInventory.builder()
                                                .productId(product.getId())
-                                               .quantity(quantity)
+                                               .stock(stock)
                                                .build();
-
-        productInventory.setCreatedAt(product.getCreatedAt());
-        productInventory.setLastModifiedAt(product.getLastModifiedAt());
 
         return productInventoryRepository.save(productInventory);
     }

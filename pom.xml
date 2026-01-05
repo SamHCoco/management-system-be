@@ -25,7 +25,6 @@
 		<module>core</module>
 		<module>employee</module>
 		<module>product</module>
-        <module>inventory</module>
     </modules>
 	<scm>
 		<connection/>

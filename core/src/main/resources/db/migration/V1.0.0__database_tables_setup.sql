@@ -37,7 +37,9 @@ create table if not exists `product` (
 create table if not exists `product_inventory` (
     `id` bigint unsigned auto_increment not null,
     `product_id` bigint unsigned not null,
-    `quantity` bigint unsigned not null,
+    `stock` int unsigned not null,
+    `low_stock_threshold` int unsigned not null,
+    `low_stock_alerted` boolean not null default 0,
     `created_at` datetime,
     `last_modified_at` datetime,
     `deleted` boolean not null default 0,
@@ -48,3 +50,17 @@ create table if not exists `product_inventory` (
         on delete restrict
 ) engine=InnoDB default charset=utf8mb4;
 
+create table if not exists `product_order` (
+    `id` bigint unsigned auto_increment not null,
+    `product_id` bigint unsigned not null,
+    `quantity` bigint unsigned not null,
+    `user_id` bigint unsigned not null,
+    `status` varchar(50) not null,
+    `created_at` datetime,
+    `last_modified_at` datetime,
+    primary key (`id`),
+    constraint `fk_product_order_product`
+        foreign key (`product_id`) references `product` (`id`)
+        on update cascade
+        on delete restrict
+) engine=InnoDB default charset=utf8mb4;

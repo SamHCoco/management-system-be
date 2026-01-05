@@ -20,8 +20,14 @@ public class ProductInventory extends Auditable {
     @Column(name = "product_id")
     private long productId;
 
-    @Column(name = "quantity")
-    private long quantity;
+    @Column(name = "stock")
+    private int stock;
+
+    @Column(name = "low_stock_threshold")
+    private int lowStockThreshold;
+
+    @Column(name = "low_stock_alerted")
+    private boolean lowStockAlerted;
 
     @Column(name = "deleted")
     private boolean deleted;
