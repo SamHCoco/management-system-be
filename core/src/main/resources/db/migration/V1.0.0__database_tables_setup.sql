@@ -1,10 +1,15 @@
-create table if not exists `employee_department` (
+create table if not exists `user` (
     `id` bigint unsigned auto_increment not null,
-    `name` varchar(255) not null unique,
+    `auth_id` varchar(255) not null,
+    `first_name` varchar(255) not null,
+    `middle_names` varchar(255),
+    `last_name` varchar(255) not null,
+    `email` varchar(255) not null unique,
     `created_at` datetime,
     `last_modified_at` datetime,
-    primary key (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `deleted` boolean not null default 0,
+    primary key (`id`)
+) engine=InnoDB default charset=utf8mb4;
 
 create table if not exists `employee` (
     `id` bigint unsigned auto_increment not null,
@@ -23,6 +28,14 @@ create table if not exists `employee` (
     primary key (id),
     foreign key (`department_id`) references `employee_department` (`id`)
 );
+
+create table if not exists `employee_department` (
+    `id` bigint unsigned auto_increment not null,
+    `name` varchar(255) not null unique,
+    `created_at` datetime,
+    `last_modified_at` datetime,
+    primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table if not exists `product` (
     `id` bigint unsigned auto_increment not null,
@@ -64,3 +77,4 @@ create table if not exists `product_order` (
         on update cascade
         on delete restrict
 ) engine=InnoDB default charset=utf8mb4;
+
