@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
 @Setter
 @RequiredArgsConstructor
 @Service
-public class ProductOrdersDtoEntityValidator implements CreateEntityValidator<ProductOrderListDto, Long> {
+public class ProductOrderListDtoValidator implements CreateEntityValidator<ProductOrderListDto, Long> {
 
     private final JpaRepositoryService repositoryService;
 

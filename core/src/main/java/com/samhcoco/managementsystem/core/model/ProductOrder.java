@@ -29,12 +29,11 @@ public class ProductOrder extends Auditable {
     @Column(name = "status")
     private String status;
 
-    public ProductOrderDto toDto() {
+    public ProductOrderDto toProductOrderDto() {
         return ProductOrderDto.builder()
-                       .id(id)
-                       .productId(productId)
-                       .userId(userId)
-                       .quantity(quantity)
-                       .build();
+                              .id(id)
+                              .productId(productId)
+                              .quantity(quantity)
+                              .build();
     }
 }

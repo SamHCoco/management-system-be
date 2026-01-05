@@ -11,7 +11,7 @@ import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
-import com.samhcoco.managementsystem.product.service.impl.ProductOrdersDtoEntityValidator;
+import com.samhcoco.managementsystem.product.service.impl.ProductOrderListDtoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductOrderService productOrderService;
     private final AuthService authService;
-    private final ProductOrdersDtoEntityValidator productOrdersDtoValidator;
+    private final ProductOrderListDtoValidator productOrdersDtoValidator;
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
@@ -55,7 +55,7 @@ public class ProductController {
         }
 
         final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderListDto, userId).stream()
-                                                                                                    .map(ProductOrder::toDto)
+                                                                                                    .map(ProductOrder::toProductOrderDto)
                                                                                                     .toList();
         return ResponseEntity.status(CREATED).body(orderDtos);
     }
