@@ -40,7 +40,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<Object> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
+    public ResponseEntity<List<OrderDto>> orderProduct(@RequestBody ProductOrdersDto productOrdersDto) {
         final Map<String, String> failureReasons = productOrdersDtoEntityValidator.validateCreate(productOrdersDto);
 
         if (!failureReasons.isEmpty()) {
