@@ -1,26 +1,25 @@
 package com.samhcoco.managementsystem.core.service;
 
-import java.util.Map;
+import com.samhcoco.managementsystem.core.model.errorMessages;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- *
- * @param <T> The entity to be validated.
- * @param <ID> The repository for the entity to be validated.
- */
-public interface EntityValidator<T, ID> {
+public abstract class EntityValidator<T, ID, R extends JpaRepository<T, ID>>
+        implements CreateEntityValidator<T, ID>, UpdateEntityValidator<T, ID> {
 
-    /**
-     * Validates the given {@link T} entity for creation.
-     * @param entity {@link T}
-     * @return Reasons for failure if validation failed, or empty if passed.
-     */
-    Map<String, String> validateCreate(T entity);
+    private final R repository;
+    private final errorMessages errorMessages;
 
-    /**
-     * Validates the given {@link T} entity for update.
-     * @param entity {@link T}.
-     * @return Reasons for failure if validation failed, or empty if passed.
-     */
-    Map<String, String> validateUpdate(T entity);
+    public EntityValidator(R repository,
+                           errorMessages errorMessages) {
+        this.repository = repository;
+        this.errorMessages = errorMessages;
+    }
 
+    public errorMessages getErrorMessages() {
+        return errorMessages;
+    }
+
+    public R getRepository() {
+        return repository;
+    }
 }

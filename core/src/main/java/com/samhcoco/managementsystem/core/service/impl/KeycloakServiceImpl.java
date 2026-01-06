@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,6 +22,7 @@ import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -31,6 +33,8 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @RequiredArgsConstructor
 @Profile("!test") // fixme - issue with bean injection failing for integration test
 public class KeycloakServiceImpl implements KeycloakService {
+
+    public static final String KEYCLOAK = "keycloak";
 
     @Value("${keycloak.realm}")
     private String realm;
@@ -72,7 +76,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         body.add("client_id", "admin-cli");
         body.add("username", username);
         body.add("password", password);
-        body.add("grant_type", grantType);
+        body.add("grant_type", "password");
 
         try {
             return restClient.post()
@@ -81,7 +85,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                             .body(body)
                             .retrieve()
                             .body(KeycloakToken.class);
-        } catch (RestClientResponseException e) {
+        } catch (RestClientException e) {
             log.error("Failed to get Keycloak Admin Access Token: {}", e.getMessage());
         }
         return null;
@@ -118,13 +122,17 @@ public class KeycloakServiceImpl implements KeycloakService {
         val token = getAdminAccessToken();
 
         try {
+            if (isNull(token)) {
+                throw new RestClientException("Failed to get Keycloak Admin Access Token");
+            }
+
             ResponseEntity<Void> response = restClient.post()
-                    .uri(url)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + token.getAccessToken())
-                    .body(user)
-                    .retrieve()
-                    .toBodilessEntity();
+                                                      .uri(url)
+                                                      .contentType(MediaType.APPLICATION_JSON)
+                                                      .header("Authorization", "Bearer " + token.getAccessToken())
+                                                      .body(user)
+                                                      .retrieve()
+                                                      .toBodilessEntity();
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 val location = response.getHeaders().getLocation();
@@ -135,7 +143,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                 log.debug("Successfully created '{}'", user);
                 return user;
             }
-        } catch (RestClientResponseException e) {
+        } catch (RestClientException e) {
             log.error("Failed to create {}: {}", user, e.getMessage());
         }
         return null;
@@ -195,10 +203,10 @@ public class KeycloakServiceImpl implements KeycloakService {
 
         try {
             return restClient.delete()
-                            .uri(url)
-                            .header("Authorization", "Bearer " + token.getAccessToken())
-                            .retrieve()
-                            .toEntity(String.class);
+                             .uri(url)
+                             .header("Authorization", "Bearer " + token.getAccessToken())
+                             .retrieve()
+                             .toEntity(String.class);
         } catch (RestClientResponseException e) {
             log.error("Failed to delete Keycloak user with ID '{}': {}", userId, e.getMessage());
         }
