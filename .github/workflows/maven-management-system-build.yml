@@ -1,8 +1,6 @@
 name: Management System BE - Build
 
 on:
-  push:
-    branches: [ "master", "pre-master", "develop" ]
   pull_request:
     branches: [ "master", "pre-master", "develop" ]
 
