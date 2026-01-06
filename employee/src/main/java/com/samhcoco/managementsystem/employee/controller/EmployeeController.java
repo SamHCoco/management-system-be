@@ -18,9 +18,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("api")
-@Tag(name = "Employee API", description = "Employee management APIs")
 @RequiredArgsConstructor
+@Tag(name = "Employee API", description = "Employee management APIs")
 public class EmployeeController {
 
     private static final String EMPLOYEE = "employee";
