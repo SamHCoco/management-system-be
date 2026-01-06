@@ -9,9 +9,9 @@ import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
-import com.samhcoco.managementsystem.product.service.impl.ProductOrderListDtoValidator;
+import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,15 +36,15 @@ public class ProductController {
     private final ProductService productService;
     private final ProductOrderService productOrderService;
     private final AuthService authService;
-    private final ProductOrderListDtoValidator productOrdersDtoValidator;
+    private final ProductOrderDtoListValidator productOrdersDtoValidator;
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderListDto productOrderListDto) {
-        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderListDto);
+    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderDtoList productOrderDtoList) {
+        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderDtoList);
 
         if (!failureReasons.isEmpty()) {
-            log.error("Failed to create Product Order for {}: {}", productOrderListDto, failureReasons);
+            log.error("Failed to create Product Order for {}: {}", productOrderDtoList, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
 
@@ -54,7 +54,7 @@ public class ProductController {
             throw new JwtUserIdClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
         }
 
-        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderListDto, userId).stream()
+        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderDtoList, userId).stream()
                                                                                                     .map(ProductOrder::toProductOrderDto)
                                                                                                     .toList();
         return ResponseEntity.status(CREATED).body(orderDtos);
