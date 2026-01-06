@@ -3,9 +3,9 @@
 ## Project Modules
 The project is organized as a multi-module Maven project with the following modules:
 - `core` - Shared core functionality across projects
+- `user` - User management project
 - `employee` - Employee management project
 - `product` - Product management project
-- `invetory` - Inventory management project
 
 ## Bill of Materials
 
