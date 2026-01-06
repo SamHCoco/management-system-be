@@ -32,6 +32,8 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @Profile("!test") // fixme - issue with bean injection failing for integration test
 public class KeycloakServiceImpl implements KeycloakService {
 
+    public static final String KEYCLOAK = "keycloak";
+
     @Value("${keycloak.realm}")
     private String realm;
 
@@ -119,12 +121,12 @@ public class KeycloakServiceImpl implements KeycloakService {
 
         try {
             ResponseEntity<Void> response = restClient.post()
-                    .uri(url)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + token.getAccessToken())
-                    .body(user)
-                    .retrieve()
-                    .toBodilessEntity();
+                                                      .uri(url)
+                                                      .contentType(MediaType.APPLICATION_JSON)
+                                                      .header("Authorization", "Bearer " + token.getAccessToken())
+                                                      .body(user)
+                                                      .retrieve()
+                                                      .toBodilessEntity();
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 val location = response.getHeaders().getLocation();
@@ -195,10 +197,10 @@ public class KeycloakServiceImpl implements KeycloakService {
 
         try {
             return restClient.delete()
-                            .uri(url)
-                            .header("Authorization", "Bearer " + token.getAccessToken())
-                            .retrieve()
-                            .toEntity(String.class);
+                             .uri(url)
+                             .header("Authorization", "Bearer " + token.getAccessToken())
+                             .retrieve()
+                             .toEntity(String.class);
         } catch (RestClientResponseException e) {
             log.error("Failed to delete Keycloak user with ID '{}': {}", userId, e.getMessage());
         }

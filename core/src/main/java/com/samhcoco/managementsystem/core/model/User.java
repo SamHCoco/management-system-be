@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.core.model;
 
+import com.samhcoco.managementsystem.core.model.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,6 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ToString
 @Entity
 @Table(name = "user")
@@ -33,4 +35,15 @@ public class User extends Auditable {
 
     @Column(name = "deleted")
     private boolean deleted;
+
+    public UserDto toDto() {
+        return UserDto.builder()
+                    .id(id)
+                    .authId(authId)
+                    .firstName(firstName)
+                    .middleNames(middleNames)
+                    .lastName(lastName)
+                    .email(email)
+                    .build();
+    }
 }

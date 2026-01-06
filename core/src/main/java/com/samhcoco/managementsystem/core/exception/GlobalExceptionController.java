@@ -17,8 +17,7 @@ public class GlobalExceptionController {
                                  .errors(e.getErrors())
                                  .build();
 
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(error);
+        return ResponseEntity.status(BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(OutOfStockException.class)
@@ -28,8 +27,7 @@ public class GlobalExceptionController {
                                  .errors(e.getErrors())
                                  .build();
 
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(error);
+        return ResponseEntity.status(BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(JwtUserIdClaimException.class)
@@ -39,8 +37,17 @@ public class GlobalExceptionController {
                                  .errors(e.getErrors())
                                  .build();
 
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                             .body(error);
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(UserCreationFailedException.class)
+    public ResponseEntity<Error> handleUserCreationException(UserCreationFailedException e) {
+        final Error error = Error.builder()
+                                 .exception(e.getMessage())
+                                 .errors(e.getErrors())
+                                 .build();
+
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(error);
     }
 
 }
