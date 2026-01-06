@@ -33,11 +33,9 @@ public class EmployeeController {
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
         if (errors.isEmpty()) {
-            return ResponseEntity.status(CREATED)
-                                 .body(employeeService.create(employee));
+            return ResponseEntity.status(CREATED).body(employeeService.create(employee));
         }
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(errors);
+        return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasRole('admin')")
@@ -45,11 +43,9 @@ public class EmployeeController {
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
         if (errors.isEmpty()) {
-            return ResponseEntity.status(OK)
-                                 .body(employeeService.create(employee));
+            return ResponseEntity.status(OK).body(employeeService.create(employee));
         }
-        return ResponseEntity.status(BAD_REQUEST)
-                             .body(errors);
+        return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")

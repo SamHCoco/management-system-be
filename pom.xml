@@ -25,6 +25,7 @@
 		<module>core</module>
 		<module>employee</module>
 		<module>product</module>
+        <module>user</module>
     </modules>
 	<scm>
 		<connection/>

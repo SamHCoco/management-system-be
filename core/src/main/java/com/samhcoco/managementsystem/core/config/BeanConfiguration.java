@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
-import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
-import com.samhcoco.managementsystem.core.repository.OrderRepository;
-import com.samhcoco.managementsystem.core.repository.ProductInventoryRepository;
-import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.model.User;
+import com.samhcoco.managementsystem.core.repository.*;
 import org.hibernate.query.Order;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,15 +38,18 @@ public class BeanConfiguration {
             ProductRepository productRepository,
             ProductInventoryRepository productInventoryRepository,
             OrderRepository orderRepository,
-            EmployeeRepository employeeRepository
+            EmployeeRepository employeeRepository,
+            UserRepository userRepository
     ){
-        final Map<Class<?>, JpaRepository<?, ?>> jpaRepositories = new HashMap<>();
+        final Map<Class<?>, JpaRepository<?, ?>> repositories = new HashMap<>();
 
-        jpaRepositories.put(Product.class, productRepository);
-        jpaRepositories.put(ProductInventory.class, productInventoryRepository);
-        jpaRepositories.put(Order.class, orderRepository);
-        jpaRepositories.put(Employee.class, employeeRepository);
-        return jpaRepositories;
+        repositories.put(Product.class, productRepository);
+        repositories.put(ProductInventory.class, productInventoryRepository);
+        repositories.put(Order.class, orderRepository);
+        repositories.put(Employee.class, employeeRepository);
+        repositories.put(User.class, userRepository);
+
+        return repositories;
     }
 
 }
