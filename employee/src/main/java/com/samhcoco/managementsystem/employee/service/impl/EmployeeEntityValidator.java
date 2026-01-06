@@ -2,8 +2,8 @@ package com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.errorMessages;
-import com.samhcoco.managementsystem.core.service.AbstractEntityValidator;
-import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.service.EntityValidator;
+import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
-public class EmployeeEntityValidator extends AbstractEntityValidator<Employee, Long, EmployeeRepository> {
+public class EmployeeEntityValidator extends EntityValidator<Employee, Long, EmployeeRepository> {
 
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
