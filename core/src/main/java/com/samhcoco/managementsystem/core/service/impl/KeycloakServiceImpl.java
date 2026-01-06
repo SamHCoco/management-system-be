@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,6 +22,7 @@ import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -74,7 +76,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         body.add("client_id", "admin-cli");
         body.add("username", username);
         body.add("password", password);
-        body.add("grant_type", grantType);
+        body.add("grant_type", "password");
 
         try {
             return restClient.post()
@@ -83,7 +85,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                             .body(body)
                             .retrieve()
                             .body(KeycloakToken.class);
-        } catch (RestClientResponseException e) {
+        } catch (RestClientException e) {
             log.error("Failed to get Keycloak Admin Access Token: {}", e.getMessage());
         }
         return null;
@@ -120,6 +122,10 @@ public class KeycloakServiceImpl implements KeycloakService {
         val token = getAdminAccessToken();
 
         try {
+            if (isNull(token)) {
+                throw new RestClientException("Failed to get Keycloak Admin Access Token");
+            }
+
             ResponseEntity<Void> response = restClient.post()
                                                       .uri(url)
                                                       .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +143,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                 log.debug("Successfully created '{}'", user);
                 return user;
             }
-        } catch (RestClientResponseException e) {
+        } catch (RestClientException e) {
             log.error("Failed to create {}: {}", user, e.getMessage());
         }
         return null;

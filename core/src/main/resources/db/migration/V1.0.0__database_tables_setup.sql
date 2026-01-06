@@ -11,6 +11,14 @@ create table if not exists `user` (
     primary key (`id`)
 ) engine=InnoDB default charset=utf8mb4;
 
+create table if not exists `employee_department` (
+    `id` bigint unsigned auto_increment not null,
+    `name` varchar(255) not null unique,
+    `created_at` datetime,
+    `last_modified_at` datetime,
+    primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 create table if not exists `employee` (
     `id` bigint unsigned auto_increment not null,
     `first_name` varchar(255) not null,
@@ -28,14 +36,6 @@ create table if not exists `employee` (
     primary key (id),
     foreign key (`department_id`) references `employee_department` (`id`)
 );
-
-create table if not exists `employee_department` (
-    `id` bigint unsigned auto_increment not null,
-    `name` varchar(255) not null unique,
-    `created_at` datetime,
-    `last_modified_at` datetime,
-    primary key (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table if not exists `product` (
     `id` bigint unsigned auto_increment not null,

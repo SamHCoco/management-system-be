@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User create(@NonNull UserDto userDto) {
         String error;
-
+        userDto.setAuthId("TEMP-ID");
         final User createdUser = userRepository.save(userDto.toUser());
 
         final Credential userCredential = Credential.builder()
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
                                                     .build();
 
         KeycloakUser keycloakUser = KeycloakUser.builder()
+                                                .username(createdUser.getEmail())
                                                 .email(createdUser.getEmail())
                                                 .firstName(createdUser.getFirstName())
                                                 .lastName(createdUser.getLastName())
