@@ -1,7 +1,6 @@
 package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
-import com.samhcoco.managementsystem.core.exception.JwtUserIdClaimException;
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.ProductOrder;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
@@ -9,7 +8,7 @@ import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
 import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.samhcoco.managementsystem.core.service.impl.AuthServiceImpl.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
@@ -40,23 +38,19 @@ public class ProductController {
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderDtoList productOrderDtoList) {
-        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderDtoList);
+    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderListDto productOrderListDto) {
+        final long userId = authService.verifyUserAuthorised();
 
+        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderListDto);
         if (!failureReasons.isEmpty()) {
-            log.error("Failed to create Product Order for {}: {}", productOrderDtoList, failureReasons);
+            log.error("Failed to create Product Order for {}: {}", productOrderListDto, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
-
-        final long userId = authService.getJwtUserIdClaim();
-        if (userId == 0) {
-            final String error = String.format(USER_ID_CLAIM_ERROR, USER_ID);
-            throw new JwtUserIdClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
-        }
-
-        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderDtoList, userId).stream()
-                                                                                                    .map(ProductOrder::toProductOrderDto)
-                                                                                                    .toList();
+        
+        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderListDto, userId)
+                                                                                .stream()
+                                                                                .map(ProductOrder::toProductOrderDto)
+                                                                                .toList();
         return ResponseEntity.status(CREATED).body(orderDtos);
     }
 
