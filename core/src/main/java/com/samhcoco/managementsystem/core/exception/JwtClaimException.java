@@ -5,10 +5,10 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class JwtUserIdClaimException extends RuntimeException{
+public class JwtClaimException extends RuntimeException{
     private Map<String, String> errors;
 
-    public JwtUserIdClaimException(String message, Map<String, String> errors) {
+    public JwtClaimException(String message, Map<String, String> errors) {
         super(message);
         this.errors = errors;
     }

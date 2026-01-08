@@ -4,8 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class GlobalExceptionController {
@@ -30,8 +29,8 @@ public class GlobalExceptionController {
         return ResponseEntity.status(BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(JwtUserIdClaimException.class)
-    public ResponseEntity<Error> handleUserIdClaimException(JwtUserIdClaimException e) {
+    @ExceptionHandler(JwtClaimException.class)
+    public ResponseEntity<Error> handleUserIdClaimException(JwtClaimException e) {
         final Error error = Error.builder()
                                  .exception(e.getMessage())
                                  .errors(e.getErrors())
@@ -48,6 +47,16 @@ public class GlobalExceptionController {
                                  .build();
 
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(AuthorizationCheckException.class)
+    public ResponseEntity<Error> handleAuthorizationCheckException(AuthorizationCheckException e) {
+        final Error error = Error.builder()
+                                 .exception(e.getMessage())
+                                 .errors(e.getErrors())
+                                 .build();
+
+        return ResponseEntity.status(FORBIDDEN).body(error);
     }
 
 }
