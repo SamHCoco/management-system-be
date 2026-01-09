@@ -5,7 +5,7 @@ import com.samhcoco.managementsystem.core.repository.ProductRepository;
 import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
 import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,12 +23,12 @@ import static java.util.Objects.isNull;
 @Setter
 @RequiredArgsConstructor
 @Service
-public class ProductOrderDtoListValidator implements CreateEntityValidator<ProductOrderListDto, Long> {
+public class ProductOrderDtoListValidator implements CreateEntityValidator<ProductOrderDtoList, Long> {
 
     private final JpaRepositoryService repositoryService;
 
     @Override
-    public Map<String, String> validateCreate(ProductOrderListDto entity) {
+    public Map<String, String> validateCreate(ProductOrderDtoList entity) {
         final Map<String, String> failureReasons = new HashMap<>();
 
         if (isNull(entity)) {
