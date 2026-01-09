@@ -36,30 +36,30 @@ public class AuthServiceImpl implements AuthService {
         final long userId = getJwtUserIdClaim();
         try {
             if (userId <= 0) {
-                throw throwForbidden(format("User ID in JWT claim invalid: User ID '%s' invalid", userId));
+                throw authorizationCheckException(format("User ID in JWT claim invalid: User ID '%s' invalid", userId));
             }
 
             final User user = userRepository.findById(userId);
             if (isNull(user)) {
-                throw throwForbidden(format("User ID in JWT claim invalid: User with ID '%s' not found", userId));
+                throw authorizationCheckException(format("User ID in JWT claim invalid: User with ID '%s' not found", userId));
             }
 
             final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof JwtAuthenticationToken token)) {
-                throw throwForbidden(format("User with ID '%s' failed authorization: Invalid authentication token", userId));
+                throw authorizationCheckException(format("User with ID '%s' failed authorization: Invalid authentication token", userId));
             }
 
             final String authId = token.getToken().getSubject();
             if (!user.getAuthId().equals(authId)) {
-                throw throwForbidden(format("User with ID '%s' failed authorization: User authId '%s' does not match JWT Auth ID '%s'",
-                                            userId, user.getAuthId(), authId
+                throw authorizationCheckException(format("User with ID '%s' failed authorization: User authId '%s' does not match JWT Auth ID '%s'",
+                                                         userId, user.getAuthId(), authId
                 ));
             }
 
             return userId;
         } catch(Exception e) {
             final String error = format("User with ID '%s' failed authorization: %s", userId, e.getMessage());
-            throw throwForbidden(error);
+            throw authorizationCheckException(error);
         }
     }
 
@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
      * @param errorMessage Error message.
      * @return {@link AuthorizationCheckException}.
      */
-    private AuthorizationCheckException throwForbidden(@NonNull String errorMessage) {
+    private AuthorizationCheckException authorizationCheckException(@NonNull String errorMessage) {
         log.error(errorMessage);
         return new AuthorizationCheckException(FORBIDDEN.name(), Map.of(JWT, errorMessage));
     }
