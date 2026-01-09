@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.user;
+package com.samhcoco.managementsystem.user.controller;
 
 import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.core.model.dto.UserDto;
