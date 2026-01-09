@@ -8,7 +8,7 @@ import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.core.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderListDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
 import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
 import lombok.RequiredArgsConstructor;
@@ -38,16 +38,16 @@ public class ProductController {
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
-    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderListDto productOrderListDto) {
+    public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderDtoList productOrderDtoList) {
         final long userId = authService.verifyUserAuthorised();
 
-        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderListDto);
+        final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderDtoList);
         if (!failureReasons.isEmpty()) {
-            log.error("Failed to create Product Order for {}: {}", productOrderListDto, failureReasons);
+            log.error("Failed to create Product Order for {}: {}", productOrderDtoList, failureReasons);
             throw new InvalidInputApiException(BAD_REQUEST.name(), failureReasons);
         }
         
-        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderListDto, userId)
+        final List<ProductOrderDto> orderDtos = productOrderService.create(productOrderDtoList, userId)
                                                                                 .stream()
                                                                                 .map(ProductOrder::toProductOrderDto)
                                                                                 .toList();
