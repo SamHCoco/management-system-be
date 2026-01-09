@@ -22,6 +22,7 @@ import java.util.Set;
 
 import static com.samhcoco.managementsystem.core.service.impl.AuthServiceImpl.USER_ID;
 import static com.samhcoco.managementsystem.core.service.impl.KeycloakServiceImpl.KEYCLOAK;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
                                                 .lastName(createdUser.getLastName())
                                                 .enabled(true)
                                                 .emailVerified(true)
-                                                .attributes(Map.of(USER_ID, String.valueOf(createdUser.getId())))
+                                                .attributes(Map.of(USER_ID, singletonList(String.valueOf(createdUser.getId()))))
                                                 .credentials(List.of(userCredential))
                                                 .build();
 
