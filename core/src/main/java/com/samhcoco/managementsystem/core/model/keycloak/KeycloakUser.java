@@ -22,6 +22,6 @@ public class KeycloakUser {
     private Boolean enabled;
     private Boolean emailVerified;
     private Long createdTimestamp;
-    private Map<String, Object> attributes;
+    private Map<String, List<String>> attributes;
     private List<Credential> credentials;
 }
