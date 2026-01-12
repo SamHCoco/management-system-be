@@ -1,10 +1,10 @@
 package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
-import com.samhcoco.managementsystem.core.model.Product;
-import com.samhcoco.managementsystem.core.model.ProductOrder;
-import com.samhcoco.managementsystem.core.model.dto.ProductDto;
-import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
+import com.samhcoco.managementsystem.product.model.Product;
+import com.samhcoco.managementsystem.product.model.ProductOrder;
+import com.samhcoco.managementsystem.product.model.dto.ProductDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.product.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;

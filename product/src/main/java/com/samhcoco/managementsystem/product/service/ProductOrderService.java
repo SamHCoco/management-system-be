@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.product.service;
 
-import com.samhcoco.managementsystem.core.model.ProductOrder;
+import com.samhcoco.managementsystem.product.model.ProductOrder;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 
 import java.util.List;
