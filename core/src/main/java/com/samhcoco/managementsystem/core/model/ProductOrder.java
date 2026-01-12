@@ -21,7 +21,7 @@ public class ProductOrder extends Auditable {
     private long productId;
 
     @Column(name = "quantity")
-    private long quantity;
+    private short quantity;
 
     @Column(name = "user_id")
     private long userId;

@@ -14,7 +14,7 @@ import lombok.*;
 public class ProductOrderDto {
     private long id;
     private long productId;
-    private long quantity;
+    private short quantity;
 
     public ProductOrder toProductOrder() {
         return ProductOrder.builder()

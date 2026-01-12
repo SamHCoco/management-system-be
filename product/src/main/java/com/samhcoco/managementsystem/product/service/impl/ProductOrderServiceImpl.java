@@ -5,8 +5,8 @@ import com.samhcoco.managementsystem.core.exception.OutOfStockException;
 import com.samhcoco.managementsystem.core.model.ProductOrder;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
 import com.samhcoco.managementsystem.core.model.ProductInventoryAlert;
-import com.samhcoco.managementsystem.core.repository.OrderRepository;
-import com.samhcoco.managementsystem.core.repository.ProductInventoryRepository;
+import com.samhcoco.managementsystem.product.repository.OrderRepository;
+import com.samhcoco.managementsystem.product.repository.ProductInventoryRepository;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
 import jakarta.transaction.Transactional;
@@ -33,7 +33,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     @Override
     @Transactional
     public List<ProductOrder> create(@NonNull ProductOrderDtoList productOrderDtoList, long userId) {
-        final Map<Long, Integer> productIdsAndQuantities = new HashMap<>();
+        final Map<Long, Short> productIdsAndQuantities = new HashMap<>();
 
         productOrderDtoList.getOrders().forEach(o -> {
             productIdsAndQuantities.put(o.getProductId(), o.getQuantity());

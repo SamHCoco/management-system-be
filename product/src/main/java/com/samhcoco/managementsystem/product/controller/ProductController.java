@@ -6,7 +6,7 @@ import com.samhcoco.managementsystem.core.model.ProductOrder;
 import com.samhcoco.managementsystem.core.model.dto.ProductDto;
 import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.AuthService;
-import com.samhcoco.managementsystem.core.service.ProductService;
+import com.samhcoco.managementsystem.product.service.ProductService;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;

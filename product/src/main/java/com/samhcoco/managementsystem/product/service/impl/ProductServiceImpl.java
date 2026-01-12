@@ -1,10 +1,10 @@
-package com.samhcoco.managementsystem.core.service.impl;
+package com.samhcoco.managementsystem.product.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
-import com.samhcoco.managementsystem.core.repository.ProductRepository;
-import com.samhcoco.managementsystem.core.service.ProductInventoryService;
-import com.samhcoco.managementsystem.core.service.ProductService;
+import com.samhcoco.managementsystem.product.repository.ProductRepository;
+import com.samhcoco.managementsystem.product.service.ProductInventoryService;
+import com.samhcoco.managementsystem.product.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
