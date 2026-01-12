@@ -1,9 +1,9 @@
-package com.samhcoco.managementsystem.core.service.impl;
+package com.samhcoco.managementsystem.product.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
-import com.samhcoco.managementsystem.core.repository.ProductInventoryRepository;
-import com.samhcoco.managementsystem.core.service.ProductInventoryService;
+import com.samhcoco.managementsystem.product.repository.ProductInventoryRepository;
+import com.samhcoco.managementsystem.product.service.ProductInventoryService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

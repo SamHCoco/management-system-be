@@ -1,11 +1,9 @@
 package com.samhcoco.managementsystem.product.service.impl;
 
-import com.samhcoco.managementsystem.core.model.Product;
-import com.samhcoco.managementsystem.core.repository.ProductRepository;
 import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
-import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
+import com.samhcoco.managementsystem.product.repository.ProductRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -25,7 +23,7 @@ import static java.util.Objects.isNull;
 @Service
 public class ProductOrderDtoListValidator implements CreateEntityValidator<ProductOrderDtoList, Long> {
 
-    private final JpaRepositoryService repositoryService;
+    private final ProductRepository productRepository;
 
     @Override
     public Map<String, String> validateCreate(ProductOrderDtoList entity) {
@@ -57,11 +55,6 @@ public class ProductOrderDtoListValidator implements CreateEntityValidator<Produ
             return failureReasons;
         }
 
-        final ProductRepository productRepository = repositoryService.getRepository(Product.class);
-        if (isNull(productRepository)) {
-            failureReasons.put("productRepository", String.format("Internal Error - failed to find JpaRepository for Class: '%s'", Product.class));
-            return failureReasons;
-        }
 
         if (!productRepository.existsByIdInAndDeletedFalse(productIds)) {
             failureReasons.put("productId", "One or more supplied Product IDs do not exist");

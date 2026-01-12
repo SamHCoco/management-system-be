@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.core.service;
+package com.samhcoco.managementsystem.product.service;
 
 import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.core.model.ProductInventory;
