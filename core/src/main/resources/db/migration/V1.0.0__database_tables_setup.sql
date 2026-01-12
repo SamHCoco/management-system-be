@@ -66,7 +66,7 @@ create table if not exists `product_inventory` (
 create table if not exists `product_order` (
     `id` bigint unsigned auto_increment not null,
     `product_id` bigint unsigned not null,
-    `quantity` bigint unsigned not null,
+    `quantity` smallint unsigned not null,
     `user_id` bigint unsigned not null,
     `status` varchar(50) not null,
     `created_at` datetime,

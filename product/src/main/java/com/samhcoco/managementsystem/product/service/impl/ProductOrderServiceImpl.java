@@ -33,7 +33,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     @Override
     @Transactional
     public List<ProductOrder> create(@NonNull ProductOrderDtoList productOrderDtoList, long userId) {
-        final Map<Long, Integer> productIdsAndQuantities = new HashMap<>();
+        final Map<Long, Short> productIdsAndQuantities = new HashMap<>();
 
         productOrderDtoList.getOrders().forEach(o -> {
             productIdsAndQuantities.put(o.getProductId(), o.getQuantity());
