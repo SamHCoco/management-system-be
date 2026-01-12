@@ -1,11 +1,9 @@
 package com.samhcoco.managementsystem.product.service.impl;
 
-import com.samhcoco.managementsystem.core.model.Product;
-import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
-import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
+import com.samhcoco.managementsystem.product.repository.ProductRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -17,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -25,7 +24,7 @@ import static java.util.Objects.isNull;
 @Service
 public class ProductOrderDtoListValidator implements CreateEntityValidator<ProductOrderDtoList, Long> {
 
-    private final JpaRepositoryService repositoryService;
+    private final ProductRepository productRepository;
 
     @Override
     public Map<String, String> validateCreate(ProductOrderDtoList entity) {
@@ -36,10 +35,22 @@ public class ProductOrderDtoListValidator implements CreateEntityValidator<Produ
             return failureReasons;
         }
 
-        final List<ProductOrderDto> orders = entity.getOrders();
+        List<ProductOrderDto> orders = entity.getOrders();
         if (isNull(orders)) {
-            failureReasons.put("ProductOrderDto", "ProductOrderDto cannot be null");
+            failureReasons.put("List<ProductOrderDto>", "Product Orders were all null - no valid orders supplied");
             return failureReasons;
+        }
+
+        for (ProductOrderDto orderDto : orders) {
+            if (isNull(orderDto)) {
+               failureReasons.put("ProductOrderDto", "An invalid null product order was supplied");
+               return failureReasons;
+            }
+
+            if (orderDto.getQuantity() <= 0) {
+                failureReasons.put("ProductOrderDto", format("Invalid quantity '%s' given for Product ID '%s'", orderDto.getQuantity(), orderDto.getProductId()));
+                return failureReasons;
+            }
         }
 
         final Set<Long> productIds = orders.stream()
@@ -57,11 +68,6 @@ public class ProductOrderDtoListValidator implements CreateEntityValidator<Produ
             return failureReasons;
         }
 
-        final ProductRepository productRepository = repositoryService.getRepository(Product.class);
-        if (isNull(productRepository)) {
-            failureReasons.put("productRepository", String.format("Internal Error - failed to find JpaRepository for Class: '%s'", Product.class));
-            return failureReasons;
-        }
 
         if (!productRepository.existsByIdInAndDeletedFalse(productIds)) {
             failureReasons.put("productId", "One or more supplied Product IDs do not exist");
