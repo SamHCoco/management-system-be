@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.core.model;
+package com.samhcoco.managementsystem.product.model;
 
 import com.samhcoco.managementsystem.core.enums.MessageType;
 import lombok.*;

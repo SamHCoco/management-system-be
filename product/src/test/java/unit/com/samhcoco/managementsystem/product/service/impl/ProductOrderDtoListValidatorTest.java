@@ -1,6 +1,6 @@
 package unit.com.samhcoco.managementsystem.product.service.impl;
 
-import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
+import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.repository.ProductRepository;
 import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;

@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.product.repository;
 
-import com.samhcoco.managementsystem.core.model.ProductInventory;
+import com.samhcoco.managementsystem.product.model.ProductInventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
