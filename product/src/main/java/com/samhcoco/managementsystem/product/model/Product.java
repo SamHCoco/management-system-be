@@ -1,6 +1,7 @@
-package com.samhcoco.managementsystem.core.model;
+package com.samhcoco.managementsystem.product.model;
 
-import com.samhcoco.managementsystem.core.model.dto.ProductDto;
+import com.samhcoco.managementsystem.core.model.Auditable;
+import com.samhcoco.managementsystem.product.model.dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.*;
 

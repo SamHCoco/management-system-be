@@ -2,9 +2,9 @@ package com.samhcoco.managementsystem.product.service.impl;
 
 import com.samhcoco.managementsystem.core.enums.MessageType;
 import com.samhcoco.managementsystem.core.exception.OutOfStockException;
-import com.samhcoco.managementsystem.core.model.ProductOrder;
-import com.samhcoco.managementsystem.core.model.ProductInventory;
-import com.samhcoco.managementsystem.core.model.ProductInventoryAlert;
+import com.samhcoco.managementsystem.product.model.ProductOrder;
+import com.samhcoco.managementsystem.product.model.ProductInventory;
+import com.samhcoco.managementsystem.product.model.ProductInventoryAlert;
 import com.samhcoco.managementsystem.product.repository.OrderRepository;
 import com.samhcoco.managementsystem.product.repository.ProductInventoryRepository;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;

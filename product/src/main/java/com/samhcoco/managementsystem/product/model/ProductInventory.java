@@ -1,5 +1,6 @@
-package com.samhcoco.managementsystem.core.model;
+package com.samhcoco.managementsystem.product.model;
 
+import com.samhcoco.managementsystem.core.model.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
