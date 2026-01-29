@@ -1,6 +1,7 @@
 package com.samhcoco.managementsystem.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
@@ -28,7 +29,9 @@ public class BeanConfiguration {
 
     @Bean
     public ObjectMapper objectMapper() {
-        return new ObjectMapper();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
     }
 
     @Bean
