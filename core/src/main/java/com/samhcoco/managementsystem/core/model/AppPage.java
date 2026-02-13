@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Page {
+public class AppPage {
     private int page = 0;
     private int size = 20;
     private String sort = "id";
