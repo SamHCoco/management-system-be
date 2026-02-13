@@ -12,7 +12,7 @@ The project is organized as a multi-module Maven project with the following modu
 This Spring Boot project is built with the following technologies and versions:
 
 ### Core Technologies
-- **Java**: 17
+- **Java**: 21
 - **Spring Boot**: 3.4.11
 - **Spring Cloud**: 2024.0.2
 - **Spring Security**: 6.4.12 (Spring Boot managed version)
