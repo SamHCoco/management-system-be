@@ -18,21 +18,21 @@ public class EmployeeServiceImplTest {
     private EmployeeService underTest;
 
     @Test
-    public void testListAllEmployees_nullArgument_constraintViolationException() {
+    public void testListAllEmployees_nullArgument_NullPointerException() {
         assertThrows(NullPointerException.class, () ->
                 underTest.listAllEmployees(null)
         );
     }
 
     @Test
-    public void testCreate_nullArgument_constraintViolationException() {
+    public void testCreate_nullArgument_NullPointerException() {
         assertThrows(NullPointerException.class, () ->
                 underTest.create(null)
         );
     }
 
     @Test
-    public void testUpdate_nullArgument_constraintViolationException() {
+    public void testUpdate_nullArgument_NullPointerException() {
         assertThrows(NullPointerException.class, () ->
                 underTest.create(null)
         );
