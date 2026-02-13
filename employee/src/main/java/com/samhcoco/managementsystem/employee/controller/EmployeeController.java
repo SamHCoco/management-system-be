@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.employee.controller;
 
+import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
@@ -22,13 +23,13 @@ import static org.springframework.http.HttpStatus.*;
 @Tag(name = "Employee API", description = "Employee management APIs")
 public class EmployeeController {
 
-    private static final String EMPLOYEE = "employee";
+    private static final String EMPLOYEES = "employees";
 
     private final EmployeeService employeeService;
     private final EmployeeEntityValidator employeeEntityValidator;
 
     @PreAuthorize("hasRole('admin')")
-    @PostMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
+    @PostMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
         if (errors.isEmpty()) {
@@ -38,7 +39,7 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @PutMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
+    @PutMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
         if (errors.isEmpty()) {
@@ -48,26 +49,26 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")
-    @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEE)
+    @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
                                                    @RequestParam(required = false) Integer size,
                                                    @RequestParam(required = false) String sort,
                                                    @RequestParam(required = false) String sortDirection) {
-        com.samhcoco.managementsystem.core.model.Page pageClass = new com.samhcoco.managementsystem.core.model.Page();
+        AppPage appPage = new AppPage();
         if (nonNull(page)) {
-            pageClass.setPage(page);
+            appPage.setPage(page);
         }
         if (nonNull(size)) {
-            pageClass.setSize(size);
+            appPage.setSize(size);
         }
         if (!isBlank(sort)) {
-            pageClass.setSort(sort);
+            appPage.setSort(sort);
         }
         if (!isBlank(sortDirection)) {
-            pageClass.setSortDirection(sortDirection);
+            appPage.setSortDirection(sortDirection);
         }
 
-        Page<Employee> pageResult = employeeService.listAllEmployees(pageClass);
+        Page<Employee> pageResult = employeeService.listAllEmployees(appPage);
         return ResponseEntity.ok(pageResult);
     }
 

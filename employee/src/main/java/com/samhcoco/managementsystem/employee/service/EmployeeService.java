@@ -1,8 +1,7 @@
 package com.samhcoco.managementsystem.employee.service;
 
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.Page;
-import jakarta.validation.constraints.NotNull;
+import com.samhcoco.managementsystem.core.model.AppPage;
 
 public interface EmployeeService {
 
@@ -15,23 +14,23 @@ public interface EmployeeService {
 
     /**
      * Returns all {@link Employee}.
-     * @param page {@link Page}
+     * @param appPage {@link AppPage}
      * @return {@link org.springframework.data.domain.Page} of {@link Employee}.
      */
-    org.springframework.data.domain.Page<Employee> listAllEmployees(@NotNull Page page);
+    org.springframework.data.domain.Page<Employee> listAllEmployees(AppPage appPage);
 
     /**
      * Persists a single new {@link Employee}.
      * @param employee {@link Employee}.
      * @return Persisted {@link Employee}.
      */
-    Employee create(@NotNull Employee employee);
+    Employee create(Employee employee);
 
     /**
      * Updates the supplied {@link Employee}.
      * @param employee {@link Employee}.
      * @return Updated {@link Employee}.
      */
-    Employee update(@NotNull Employee employee);
+    Employee update(Employee employee);
 
 }
