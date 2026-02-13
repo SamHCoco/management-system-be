@@ -1,9 +1,10 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
+import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -26,17 +27,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<Employee> listAllEmployees(@NotNull com.samhcoco.managementsystem.core.model.Page page) {
-        return employeeRepository.findAll(page.toPageRequest());
+    public Page<Employee> listAllEmployees(@NonNull AppPage appPage) {
+        return employeeRepository.findAll(appPage.toPageRequest());
     }
 
     @Override
-    public Employee create(@NotNull Employee employee) {
+    public Employee create(@NonNull Employee employee) {
         return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee update(@NotNull Employee employee) {
+    public Employee update(@NonNull Employee employee) {
         return employeeRepository.save(employee);
     }
 }

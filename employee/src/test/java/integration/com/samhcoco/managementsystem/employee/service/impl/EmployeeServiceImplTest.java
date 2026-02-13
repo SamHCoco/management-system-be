@@ -3,7 +3,6 @@ package integration.com.samhcoco.managementsystem.employee.service.impl;
 import com.samhcoco.managementsystem.employee.EmployeeApplication;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import integration.com.samhcoco.managementsystem.employee.config.TestSecurityConfig;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,21 +19,21 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void testListAllEmployees_nullArgument_constraintViolationException() {
-        assertThrows(ConstraintViolationException.class, () ->
+        assertThrows(NullPointerException.class, () ->
                 underTest.listAllEmployees(null)
         );
     }
 
     @Test
     public void testCreate_nullArgument_constraintViolationException() {
-        assertThrows(ConstraintViolationException.class, () ->
+        assertThrows(NullPointerException.class, () ->
                 underTest.create(null)
         );
     }
 
     @Test
     public void testUpdate_nullArgument_constraintViolationException() {
-        assertThrows(ConstraintViolationException.class, () ->
+        assertThrows(NullPointerException.class, () ->
                 underTest.create(null)
         );
     }
