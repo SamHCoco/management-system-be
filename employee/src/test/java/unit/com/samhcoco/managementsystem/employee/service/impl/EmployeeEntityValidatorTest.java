@@ -1,7 +1,7 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.errorMessages;
+import com.samhcoco.managementsystem.core.model.ErrorMessages;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class EmployeeEntityValidatorTest {
     private EmployeeRepository employeeRepository;
 
     @Mock
-    private errorMessages errorMessages;
+    private ErrorMessages errorMessages;
 
     private EmployeeEntityValidator underTest;
 

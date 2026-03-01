@@ -1,7 +1,7 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.errorMessages;
+import com.samhcoco.managementsystem.core.model.ErrorMessages;
 import com.samhcoco.managementsystem.core.service.EntityValidator;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import lombok.NonNull;
@@ -35,7 +35,7 @@ public class EmployeeEntityValidator extends EntityValidator<Employee, Long, Emp
 
     @Autowired
     public EmployeeEntityValidator(EmployeeRepository employeeRepository,
-                                   errorMessages errorMessageConfig) {
+                                   ErrorMessages errorMessageConfig) {
         super(employeeRepository, errorMessageConfig);
     }
 
