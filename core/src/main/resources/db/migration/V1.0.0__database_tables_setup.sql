@@ -17,7 +17,7 @@ create table if not exists `employee_department` (
     `name` varchar(255) not null unique,
     `created_at` datetime,
     `last_modified_at` datetime,
-    `last_modified_by` varchar(255),
+    `last_modified_by` varchar(255)not null default 'system',
     `deleted` boolean not null default 0,
     primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -61,6 +61,7 @@ create table if not exists `product_inventory` (
     `low_stock_alerted` boolean not null default 0,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (`id`),
     constraint `fk_product_inventory_product`
