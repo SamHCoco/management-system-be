@@ -19,6 +19,12 @@ public abstract class Auditable {
     @Column(name = "last_modified_at")
     private Instant lastModifiedAt;
 
+    @Column(name = "last_modified_by")
+    private String lastModifiedBy;
+
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @PrePersist
     protected void onCreate() {
         if (createdAt == null && lastModifiedAt == null) {

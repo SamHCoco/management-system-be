@@ -27,9 +27,6 @@ public class Product extends Auditable {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "deleted")
-    private boolean deleted;
-
     public ProductDto toDto() {
         return ProductDto.builder()
                          .id(id)

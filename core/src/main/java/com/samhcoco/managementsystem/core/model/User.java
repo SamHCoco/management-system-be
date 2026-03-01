@@ -33,9 +33,6 @@ public class User extends Auditable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "deleted")
-    private boolean deleted;
-
     public UserDto toDto() {
         return UserDto.builder()
                     .id(id)
