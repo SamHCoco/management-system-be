@@ -3,7 +3,7 @@ package com.samhcoco.managementsystem.core.service;
 import com.samhcoco.managementsystem.core.exception.AuthorizationCheckException;
 import com.samhcoco.managementsystem.core.exception.JwtClaimException;
 
-public interface JwtAuthService {
+public interface JwtAuthService extends AuthService {
 
     String JWT = "JWT";
     String USER_ID = "userId";

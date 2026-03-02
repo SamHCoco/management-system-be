@@ -2,11 +2,11 @@ package com.samhcoco.managementsystem.core.service.impl;
 
 import com.samhcoco.managementsystem.core.exception.AuthorizationCheckException;
 import com.samhcoco.managementsystem.core.exception.JwtClaimException;
+import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.keycloak.*;
 import com.samhcoco.managementsystem.core.repository.BaseRepository;
 import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
 import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
-import com.samhcoco.managementsystem.core.service.JwtAuthService;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @Service
 @RequiredArgsConstructor
 @Profile("!test") // fixme - issue with bean injection failing for integration test
-public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
+public class KeycloakServiceImpl implements KeycloakService {
 
     public static final String KEYCLOAK = "keycloak";
 
@@ -128,7 +128,7 @@ public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
     }
 
     @Override
-    public KeycloakUser create(@NonNull KeycloakUser user) {
+    public AuthUser createUser(@NonNull AuthUser authUser) {
         val url = format("%s/admin/realms/%s/users", baseUrl, realm);
 
         val token = getAdminAccessToken();
@@ -138,28 +138,78 @@ public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
                 throw new RestClientException("Failed to get Keycloak Admin Access Token");
             }
 
+            val keycloakUser = authUser.toKeycloakUser();
+
             ResponseEntity<Void> response = restClient.post()
-                                                      .uri(url)
-                                                      .contentType(MediaType.APPLICATION_JSON)
-                                                      .header("Authorization", "Bearer " + token.getAccessToken())
-                                                      .body(user)
-                                                      .retrieve()
-                                                      .toBodilessEntity();
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + token.getAccessToken())
+                    .body(keycloakUser)
+                    .retrieve()
+                    .toBodilessEntity();
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 val location = response.getHeaders().getLocation();
+
                 if (nonNull(location)) {
                     val uri = location.toString().split("/");
-                    user.setId(uri[uri.length - 1]);
+                    authUser.setAuthId(uri[uri.length - 1]);
                 }
-                log.debug("Successfully created '{}'", user);
-                return user;
+
+                log.debug("Successfully created '{}'", keycloakUser);
+
+                Set<String> roles = authUser.getRoles();
+                if (roles != null && !roles.isEmpty()) {
+                    assignRoles(authUser.getAuthId(), roles);
+                }
+                return authUser;
             }
         } catch (RestClientException e) {
-            log.error("Failed to create {}: {}", user, e.getMessage());
+            authUser.setCredentials(null);
+            log.error("Failed to register {} with Keycloak: {}", authUser, e.getMessage());
         }
         return null;
     }
+
+//    @Override
+//    public KeycloakUser create(@NonNull KeycloakUser keycloakUser, Set<String> roles) {
+//        val url = format("%s/admin/realms/%s/users", baseUrl, realm);
+//
+//        val token = getAdminAccessToken();
+//
+//        try {
+//            if (isNull(token)) {
+//                throw new RestClientException("Failed to get Keycloak Admin Access Token");
+//            }
+//
+//            ResponseEntity<Void> response = restClient.post()
+//                                                      .uri(url)
+//                                                      .contentType(MediaType.APPLICATION_JSON)
+//                                                      .header("Authorization", "Bearer " + token.getAccessToken())
+//                                                      .body(keycloakUser)
+//                                                      .retrieve()
+//                                                      .toBodilessEntity();
+//
+//            if (response.getStatusCode().is2xxSuccessful()) {
+//                val location = response.getHeaders().getLocation();
+//                if (nonNull(location)) {
+//                    val uri = location.toString().split("/");
+//                    keycloakUser.setId(uri[uri.length - 1]);
+//                }
+//                log.debug("Successfully created '{}'", keycloakUser);
+//
+//                if (!isNull(roles) && !roles.isEmpty()) {
+//                    assignRoles(keycloakUser.getId(), roles);
+//                }
+//
+//                return keycloakUser;
+//            }
+//        } catch (RestClientException e) {
+//            log.error("Failed to create {}: {}", keycloakUser, e.getMessage());
+//            return null;
+//        }
+//        return null;
+//    }
 
     @Override
     public ResponseEntity<String> assignRoles(@NonNull String userId, @NonNull Set<String> roles) {
@@ -179,7 +229,9 @@ public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
                             .retrieve()
                             .toEntity(String.class);
         } catch (RestClientResponseException e) {
-            log.error("Failed to assign Keycloak user with ID '{}' roles {}: {}", userId, roles, e.getMessage());
+            log.error("Failed to assign Keycloak user with Auth ID '{}' roles {}: {}", userId, roles, e.getMessage());
+            log.error("Deleting Keycloak user with Auth ID '{}'...", userId);
+            delete(userId);
         }
         return null;
     }
@@ -359,12 +411,12 @@ public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
 
             final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof JwtAuthenticationToken token)) {
-                throw authorizationCheckException(format("User with ID '%s' failed authorization: Invalid authentication token", id));
+                throw authorizationCheckException(format("Entity with ID '%s' failed authorization: Invalid authentication token", id));
             }
 
             final String authId = token.getToken().getSubject();
             if (!entity.getAuthId().equals(authId)) {
-                throw authorizationCheckException(format("User with ID '%s' failed authorization: User authId '%s' does not match JWT Auth ID '%s'",
+                throw authorizationCheckException(format("Entity with ID '%s' failed authorization: User authId '%s' does not match JWT Auth ID '%s'",
                         id, entity.getAuthId(), authId
                 ));
             }
@@ -389,5 +441,23 @@ public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
     private AuthorizationCheckException authorizationCheckException(@NonNull String errorMessage) {
         log.error(errorMessage);
         return new AuthorizationCheckException(FORBIDDEN.name(), Map.of(JWT, errorMessage));
+    }
+
+    /**
+     * Maps the given {@link AuthUser} to a {@link KeycloakUser}.
+     * @param authUser {@link AuthUser}.
+     * @return {@link KeycloakUser}.
+     */
+    private KeycloakUser toKeycloakUser(@NonNull AuthUser authUser) {
+        return KeycloakUser.builder()
+                .username(authUser.getEmail())
+                .email(authUser.getEmail())
+                .firstName(authUser.getFirstName())
+                .lastName(authUser.getLastName())
+                .enabled(true)
+                .emailVerified(true)
+                .attributes(authUser.getCustomJwtClaims())
+                .credentials(authUser.getCredentials())
+                .build();
     }
 }

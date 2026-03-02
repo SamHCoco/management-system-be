@@ -2,9 +2,11 @@ package com.samhcoco.managementsystem.employee.controller;
 
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,26 +31,30 @@ public class EmployeeController {
     private final EmployeeEntityValidator employeeEntityValidator;
 
     @PreAuthorize("hasRole('admin')")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
-    public ResponseEntity<Object> createEmployee(@RequestBody Employee employee) {
-        Map<String, String> errors = employeeEntityValidator.validateCreate(employee);
+    public ResponseEntity<Object> createEmployee(@RequestBody EmployeeRegistrationDto employeeRegistrationDto) {
+        final Map<String, String> errors = employeeEntityValidator.validateCreate(employeeRegistrationDto.toEmployee());
         if (errors.isEmpty()) {
-            return ResponseEntity.status(CREATED).body(employeeService.create(employee));
+            return ResponseEntity.status(CREATED).body(employeeService.create(employeeRegistrationDto));
         }
         return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasRole('admin')")
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee) {
         Map<String, String> errors = employeeEntityValidator.validateUpdate(employee);
+
         if (errors.isEmpty()) {
-            return ResponseEntity.status(OK).body(employeeService.create(employee));
+            return ResponseEntity.status(OK).body(employeeService.update(employee));
         }
         return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
     @PreAuthorize("hasAnyRole('admin','user')")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
                                                    @RequestParam(required = false) Integer size,

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeeEntityValidatorTest {
+public class EmployeeRegistrationDtoValidatorTest {
 
     @Mock
     private EmployeeRepository employeeRepository;

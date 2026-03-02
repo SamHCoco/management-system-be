@@ -24,6 +24,7 @@ create table if not exists `employee_department` (
 
 create table if not exists `employee` (
     `id` bigint unsigned auto_increment not null,
+    `auth_id` varchar(255) not null,
     `first_name` varchar(255) not null,
     `middle_names` varchar(255),
     `last_name` varchar(255) not null,

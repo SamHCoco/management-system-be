@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Set;
 
-public interface KeycloakService {
+public interface KeycloakService extends JwtAuthService {
 
     /**
      * Returns an admin {@link KeycloakToken}.
@@ -15,12 +15,13 @@ public interface KeycloakService {
     KeycloakToken getAdminAccessToken();
 
 
-    /**
-     * Creates a {@link KeycloakUser}.
-     * @param user The {@link KeycloakUser}.
-     * @return The created {@link KeycloakUser}.
-     */
-    KeycloakUser create(KeycloakUser user);
+//    /**
+//     * Creates a {@link KeycloakUser}.
+//     * @param keycloakUser The {@link KeycloakUser}.
+//     * @param roles  Roles to be assigned to the user.
+//     * @return The created {@link KeycloakUser}.
+//     */
+//    KeycloakUser create(KeycloakUser keycloakUser, Set<String> roles);
 
     /**
      * Assigns the given roles to the specified {@link KeycloakUser}.
