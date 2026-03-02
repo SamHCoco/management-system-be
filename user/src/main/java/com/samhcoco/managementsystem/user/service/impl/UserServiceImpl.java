@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.samhcoco.managementsystem.core.service.impl.AuthServiceImpl.USER_ID;
+
+import static com.samhcoco.managementsystem.core.service.JwtAuthService.USER_ID;
 import static com.samhcoco.managementsystem.core.service.impl.KeycloakServiceImpl.KEYCLOAK;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;

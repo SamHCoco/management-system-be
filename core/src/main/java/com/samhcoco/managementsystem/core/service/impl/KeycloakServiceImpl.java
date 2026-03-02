@@ -1,6 +1,12 @@
 package com.samhcoco.managementsystem.core.service.impl;
 
+import com.samhcoco.managementsystem.core.exception.AuthorizationCheckException;
+import com.samhcoco.managementsystem.core.exception.JwtClaimException;
 import com.samhcoco.managementsystem.core.model.keycloak.*;
+import com.samhcoco.managementsystem.core.repository.BaseRepository;
+import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
+import com.samhcoco.managementsystem.core.service.JpaRepositoryService;
+import com.samhcoco.managementsystem.core.service.JwtAuthService;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +17,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
@@ -25,6 +35,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
@@ -32,7 +43,7 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 @Service
 @RequiredArgsConstructor
 @Profile("!test") // fixme - issue with bean injection failing for integration test
-public class KeycloakServiceImpl implements KeycloakService {
+public class KeycloakServiceImpl implements KeycloakService, JwtAuthService {
 
     public static final String KEYCLOAK = "keycloak";
 
@@ -58,6 +69,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     private String baseUrl;
 
     private final RestClient restClient;
+    private JpaRepositoryService jpaRepositoryService;
 
     @Override
     public KeycloakToken getAdminAccessToken() {
@@ -292,12 +304,12 @@ public class KeycloakServiceImpl implements KeycloakService {
 
         try {
             ResponseEntity<KeycloakUser> response = restClient.put()
-                                                            .uri(url)
-                                                            .contentType(MediaType.APPLICATION_JSON)
-                                                            .header("Authorization", "Bearer " + token.getAccessToken())
-                                                            .body(user)
-                                                            .retrieve()
-                                                            .toEntity(KeycloakUser.class);
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + token.getAccessToken())
+                    .body(user)
+                    .retrieve()
+                    .toEntity(KeycloakUser.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 return user;
@@ -307,5 +319,75 @@ public class KeycloakServiceImpl implements KeycloakService {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public String getJwtClaimAsString(@NonNull String claim) {
+        try {
+            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            final Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
+            return jwt.getClaimAsString(claim);
+        } catch(Exception e) {
+            final String error = format("Failed to get '%s' claim from JWT: %s", claim, e.getMessage());
+            log.error(error);
+            throw new JwtClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
+        }
+    }
+
+    @Override
+    public long getJwtClaimAsLong(String claim) {
+        try {
+            final String claimString = getJwtClaimAsString(claim);
+            return Long.parseLong(claimString);
+        } catch (Exception e) {
+            final String error = format("Failed to get '%s' claim from JWT: %s", claim, e.getMessage());
+            log.error(error);
+            throw new JwtClaimException(INTERNAL_SERVER_ERROR.name(), Map.of(JWT, error));
+        }
+    }
+
+    @Override
+    public <T extends AuthIdentifiable> long verifyPrincipalAuthorisedAndReturnId(String idClaim, Class<T> clazz) {
+        final long id = getJwtClaimAsLong(idClaim);
+        try {
+            BaseRepository<T, Long> repository = jpaRepositoryService.getRepository(clazz);
+
+            final T entity = repository.findById(id);
+            if (isNull(entity)) {
+                throw authorizationCheckException(format("ID in JWT claim invalid: Entity with ID '%s' not found", id));
+            }
+
+            final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (!(auth instanceof JwtAuthenticationToken token)) {
+                throw authorizationCheckException(format("User with ID '%s' failed authorization: Invalid authentication token", id));
+            }
+
+            final String authId = token.getToken().getSubject();
+            if (!entity.getAuthId().equals(authId)) {
+                throw authorizationCheckException(format("User with ID '%s' failed authorization: User authId '%s' does not match JWT Auth ID '%s'",
+                        id, entity.getAuthId(), authId
+                ));
+            }
+
+            return id;
+        } catch(Exception e) {
+            final String error = format("User with ID '%s' failed authorization: %s", id, e.getMessage());
+            throw authorizationCheckException(error);
+        }
+    }
+
+    @Override
+    public JpaRepositoryService getJpaRepositoryService() {
+        return jpaRepositoryService;
+    }
+
+    /**
+     * Logs error message and returns {@link AuthorizationCheckException}.
+     * @param errorMessage Error message.
+     * @return {@link AuthorizationCheckException}.
+     */
+    private AuthorizationCheckException authorizationCheckException(@NonNull String errorMessage) {
+        log.error(errorMessage);
+        return new AuthorizationCheckException(FORBIDDEN.name(), Map.of(JWT, errorMessage));
     }
 }

@@ -1,15 +1,16 @@
 package com.samhcoco.managementsystem.product.controller;
 
 import com.samhcoco.managementsystem.core.exception.InvalidInputApiException;
+import com.samhcoco.managementsystem.core.model.User;
+import com.samhcoco.managementsystem.core.service.JwtAuthService;
+import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.Product;
 import com.samhcoco.managementsystem.product.model.ProductOrder;
 import com.samhcoco.managementsystem.product.model.dto.ProductDto;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
-import com.samhcoco.managementsystem.core.service.AuthService;
-import com.samhcoco.managementsystem.product.service.ProductService;
-import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
 import com.samhcoco.managementsystem.product.service.ProductOrderService;
+import com.samhcoco.managementsystem.product.service.ProductService;
 import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+import static com.samhcoco.managementsystem.core.service.JwtAuthService.USER_ID;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
@@ -33,13 +35,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductOrderService productOrderService;
-    private final AuthService authService;
+    private final JwtAuthService jwtAuthService;
     private final ProductOrderDtoListValidator productOrdersDtoValidator;
 
     @PreAuthorize("hasRole('user')")
     @PostMapping(ApiVersion.VERSION_1 + "/" + PRODUCT + "/orders")
     public ResponseEntity<List<ProductOrderDto>> orderProduct(@RequestBody ProductOrderDtoList productOrderDtoList) {
-        final long userId = authService.verifyUserAuthorised();
+        final long userId = jwtAuthService.verifyPrincipalAuthorisedAndReturnId(USER_ID, User.class);
 
         final Map<String, String> failureReasons = productOrdersDtoValidator.validateCreate(productOrderDtoList);
         if (!failureReasons.isEmpty()) {
