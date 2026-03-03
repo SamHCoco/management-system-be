@@ -156,7 +156,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                     final ResponseEntity<String> assignedRoles = assignClientRoles(authUser.getAuthId(), roles, token);
                     if (assignedRoles == null || !assignedRoles.getStatusCode().is2xxSuccessful()) {
                         authUser.setCredentials(null);
-                        throw new RestClientException(String.format("Failed to assign roles '%s' to %s", roles, authUser));
+                        throw new RestClientException(format("Failed to assign roles '%s' to %s", roles, authUser));
                     }
                 }
                 return authUser;
@@ -176,9 +176,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         val token = (accessToken == null) ? getAdminAccessToken() : accessToken;
 
         val client = listClients(token).stream()
-                            .filter(c -> c.getClientId().equals(clientName))
-                            .findFirst()
-                            .orElseThrow(() -> new RuntimeException("Keycloak Client not found: " + clientName));
+                                    .filter(c -> c.getClientId().equals(clientName))
+                                    .findFirst()
+                                    .orElseThrow(() -> new RuntimeException(format("Keycloak Client not found: '%s'", clientName)));
 
         val clientUuid = client.getId();
 
@@ -186,7 +186,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                                             .filter(role -> roles.contains(role.getName()))
                                             .collect(toList());
 
-        val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s", baseUrl, realm, authId, clientUuid);
+        val url = format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s", baseUrl, realm, authId, clientUuid);
         try {
             return restClient.post()
                             .uri(url)
@@ -207,7 +207,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     public List<KeycloakRole> listAvailableClientRoles(@NonNull String authId,
                                                        @NonNull String clientUuid,
                                                        KeycloakToken accessToken) {
-        val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s/available", baseUrl, realm, authId, clientUuid);
+        val url = format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s/available", baseUrl, realm, authId, clientUuid);
 
         val token = (accessToken == null) ? getAdminAccessToken() : accessToken;
 
@@ -325,20 +325,19 @@ public class KeycloakServiceImpl implements KeycloakService {
         val token = getAdminAccessToken();
 
         try {
-            ResponseEntity<KeycloakUser> response = restClient.put()
-                    .uri(url)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + token.getAccessToken())
-                    .body(user)
-                    .retrieve()
-                    .toEntity(KeycloakUser.class);
+            final ResponseEntity<KeycloakUser> response = restClient.put()
+                                                        .uri(url)
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .header("Authorization", "Bearer " + token.getAccessToken())
+                                                        .body(user)
+                                                        .retrieve()
+                                                        .toEntity(KeycloakUser.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 return user;
             }
         } catch (RestClientResponseException e) {
             log.error("Failed to updated Keycloak user with ID {}: {}", user.getId(), e.getMessage());
-            return null;
         }
         return null;
     }
