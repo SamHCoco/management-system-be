@@ -2,10 +2,10 @@ package com.samhcoco.managementsystem.user.service.impl;
 
 import com.samhcoco.managementsystem.core.enums.KeycloakRoles;
 import com.samhcoco.managementsystem.core.exception.UserCreationFailedException;
+import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.User;
-import com.samhcoco.managementsystem.core.model.dto.UserDto;
+import com.samhcoco.managementsystem.core.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.core.model.keycloak.Credential;
-import com.samhcoco.managementsystem.core.model.keycloak.KeycloakUser;
 import com.samhcoco.managementsystem.core.repository.UserRepository;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
 import com.samhcoco.managementsystem.user.service.UserService;
@@ -13,14 +13,13 @@ import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.samhcoco.managementsystem.core.service.impl.AuthServiceImpl.USER_ID;
+import static com.samhcoco.managementsystem.core.service.JwtAuthService.USER_ID;
 import static com.samhcoco.managementsystem.core.service.impl.KeycloakServiceImpl.KEYCLOAK;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
@@ -36,48 +35,56 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(@NonNull UserDto userDto) {
+    public User create(@NonNull UserRegistrationDto userRegistrationDto) {
         String error;
-        userDto.setAuthId("TEMP-ID");
-        final User createdUser = userRepository.save(userDto.toUser());
+        userRegistrationDto.setAuthId("TEMP-ID");
+        final User user = userRepository.save(userRegistrationDto.toUser());
 
-        final Credential userCredential = Credential.builder()
-                                                    .temporary(false)
-                                                    .value(userDto.getPassword())
-                                                    .build();
-
-        KeycloakUser keycloakUser = KeycloakUser.builder()
-                                                .username(createdUser.getEmail())
-                                                .email(createdUser.getEmail())
-                                                .firstName(createdUser.getFirstName())
-                                                .lastName(createdUser.getLastName())
-                                                .enabled(true)
-                                                .emailVerified(true)
-                                                .attributes(Map.of(USER_ID, singletonList(String.valueOf(createdUser.getId()))))
-                                                .credentials(List.of(userCredential))
+        final Credential credential = Credential.builder()
+                                                .temporary(false)
+                                                .value(userRegistrationDto.getPassword())
                                                 .build();
 
-        keycloakUser = keycloakService.create(keycloakUser);
+        final Map<String, List<String>> customJwtClaims = Map.of(USER_ID, singletonList(String.valueOf(user.getId())));
+        final Set<String> roles = Set.of(KeycloakRoles.USER.name().toLowerCase());
 
-        if (isNull(keycloakUser)) {
-            userDto.removePassword();
-            error = String.format("Failed to create User with '%s': failed to register user with Keycloak", userDto);
+        final AuthUser authUser = user.toAuthUser(credential,
+                                                  customJwtClaims,
+                                                  roles);
+
+
+//        KeycloakUser keycloakUser = KeycloakUser.builder()
+//                                                .username(createdUser.getEmail())
+//                                                .email(createdUser.getEmail())
+//                                                .firstName(createdUser.getFirstName())
+//                                                .lastName(createdUser.getLastName())
+//                                                .enabled(true)
+//                                                .emailVerified(true)
+//                                                .attributes(Map.of(USER_ID, singletonList(String.valueOf(createdUser.getId()))))
+//                                                .credentials(List.of(userCredential))
+//                                                .build();
+
+        AuthUser createdAuthUser = keycloakService.createUser(authUser);
+
+        if (isNull(createdAuthUser)) {
+            userRegistrationDto.removePassword();
+            error = String.format("Failed to create User with '%s': Keycloak registration failed", userRegistrationDto);
             throwUserCreationFailedException(error);
         }
 
-        createdUser.setAuthId(keycloakUser.getId());
+        user.setAuthId(authUser.getAuthId());
 
-        final ResponseEntity<String> roles = keycloakService.assignRoles(keycloakUser.getId(),
-                                                                         Set.of(KeycloakRoles.USER.name().toLowerCase()));
+//        final ResponseEntity<String> roles = keycloakService.assignRoles(keycloakUser.getId(),
+//                                                                         );
+//
+//        if (isNull(roles) || !roles.getStatusCode().is2xxSuccessful()) {
+//            keycloakService.delete(keycloakUser.getId());
+//            error = String.format("Keycloak failed to assign %s 'user' role", user);
+//            throwUserCreationFailedException(error);
+//        }
 
-        if (isNull(roles) || !roles.getStatusCode().is2xxSuccessful()) {
-            keycloakService.delete(keycloakUser.getId());
-            error = String.format("Keycloak failed to assign %s 'user' role", createdUser);
-            throwUserCreationFailedException(error);
-        }
-
-        final User persistedUser = userRepository.save(createdUser);
-        log.info("User successfully registered: {}", persistedUser);
+        final User persistedUser = userRepository.save(user);
+        log.info("User successfully created and registered with Keycloak: {}", persistedUser);
         return persistedUser;
     }
 

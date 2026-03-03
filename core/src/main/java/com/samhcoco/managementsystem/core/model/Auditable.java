@@ -13,11 +13,19 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class Auditable {
 
+    private static final String SYSTEM = "system";
+
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "last_modified_at")
     private Instant lastModifiedAt;
+
+    @Column(name = "last_modified_by")
+    private String lastModifiedBy;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @PrePersist
     protected void onCreate() {
@@ -26,11 +34,17 @@ public abstract class Auditable {
             createdAt = now;
             lastModifiedAt = now;
         }
+        if (lastModifiedBy == null) {
+            lastModifiedBy = SYSTEM;
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         lastModifiedAt = Instant.now();
+        if (lastModifiedBy == null) {
+            lastModifiedBy = SYSTEM;
+        }
     }
 
 }

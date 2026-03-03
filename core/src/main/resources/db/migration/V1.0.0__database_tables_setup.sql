@@ -7,6 +7,7 @@ create table if not exists `user` (
     `email` varchar(255) not null unique,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (`id`)
 ) engine=InnoDB default charset=utf8mb4;
@@ -16,11 +17,14 @@ create table if not exists `employee_department` (
     `name` varchar(255) not null unique,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
+    `deleted` boolean not null default 0,
     primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table if not exists `employee` (
     `id` bigint unsigned auto_increment not null,
+    `auth_id` varchar(255) not null,
     `first_name` varchar(255) not null,
     `middle_names` varchar(255),
     `last_name` varchar(255) not null,
@@ -33,6 +37,8 @@ create table if not exists `employee` (
     `address_post_code` varchar(15) not null,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
+    `deleted` boolean not null default 0,
     primary key (id),
     foreign key (`department_id`) references `employee_department` (`id`)
 );
@@ -43,6 +49,7 @@ create table if not exists `product` (
     `price` decimal(9,2) not null,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (`id`)
 ) engine=InnoDB default charset=utf8mb4;
@@ -55,6 +62,7 @@ create table if not exists `product_inventory` (
     `low_stock_alerted` boolean not null default 0,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (`id`),
     constraint `fk_product_inventory_product`
@@ -71,6 +79,8 @@ create table if not exists `product_order` (
     `status` varchar(50) not null,
     `created_at` datetime,
     `last_modified_at` datetime,
+    `last_modified_by` varchar(255) not null default 'system',
+    `deleted` boolean not null default 0,
     primary key (`id`),
     constraint `fk_product_order_product`
         foreign key (`product_id`) references `product` (`id`)

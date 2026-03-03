@@ -15,9 +15,10 @@ public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedA
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         final ArrayList<GrantedAuthority> roles = new ArrayList<>();
-        final Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+        final Map<String, Object> resourceAccess = (Map<String, Object>) jwt.getClaims().get("resource_access");
+        final Map<String, Object> clientRoles = (Map<String, Object>) resourceAccess.get("management_system");
 
-        ((List<String>) realmAccess.get("roles")).stream()
+        ((List<String>) clientRoles.get("roles")).stream()
                 .map(role -> "ROLE_" + role)
                 .forEach(r -> roles.add(new SimpleGrantedAuthority(r)));
         return roles;
