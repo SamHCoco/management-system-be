@@ -34,10 +34,6 @@ build/
 
 .DS_Store
 DS_Store
-dev_dummy_data.sql
 .env
-dev_data.sql
-dev_reset_db.sh
-dev_populate_db.sh
 env.sh
 /certs
