@@ -1,6 +1,7 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.enums.KeycloakRoles;
+import com.samhcoco.managementsystem.core.exception.UserCreationFailedException;
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.Employee;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 
 @Slf4j
@@ -70,6 +72,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                                                 credential,
                                                 customJwtClaims,
                                                 roles));
+
+        if (authUser == null) {
+            employeeRegistrationDto.removePassword();
+            throw new UserCreationFailedException("Keycloak", Map.of("Keycloak", format("Failed to register '%s' with Keycloak", employeeRegistrationDto)));
+        }
 
         createdEmployee.setAuthId(authUser.getAuthId());
         return employeeRepository.save(createdEmployee);

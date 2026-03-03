@@ -1,15 +1,19 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.EmployeeDepartment;
 import com.samhcoco.managementsystem.core.model.ErrorMessages;
-import com.samhcoco.managementsystem.core.service.EntityValidator;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.service.EntityValidator;
+import com.samhcoco.managementsystem.employee.repository.EmployeeDepartmentRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -33,10 +37,14 @@ public class EmployeeEntityValidator extends EntityValidator<Employee, Long, Emp
     public static final String LAST_MODIFIED_AT = "lastModifiedAt";
     public static final String ENTITY = "entity";
 
+    private final EmployeeDepartmentRepository employeeDepartmentRepository;
+
     @Autowired
     public EmployeeEntityValidator(EmployeeRepository employeeRepository,
+                                   EmployeeDepartmentRepository employeeDepartmentRepository,
                                    ErrorMessages errorMessageConfig) {
         super(employeeRepository, errorMessageConfig);
+        this.employeeDepartmentRepository = employeeDepartmentRepository;
     }
 
     @Override
@@ -127,7 +135,12 @@ public class EmployeeEntityValidator extends EntityValidator<Employee, Long, Emp
             errors.put(PHONE, getErrorMessages().getNullOrEmpty());
         }
 
-        if (entity.getDepartmentId() == 0) {
+        Set<Long> departmentIds = employeeDepartmentRepository.findAllByDeletedFalse()
+                                                    .stream()
+                                                    .map(EmployeeDepartment::getId)
+                                                    .collect(Collectors.toSet());
+
+        if (!departmentIds.contains(entity.getDepartmentId())) {
             errors.put(EMPLOYEE_DEPARTMENT_ID, getErrorMessages().getFieldValueInvalid());
         }
 

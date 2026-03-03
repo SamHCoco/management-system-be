@@ -53,12 +53,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Value("${keycloak.client}")
     private String clientName;
 
-    @Value("${keycloak.user}")
-    private String username;
-
-    @Value("${keycloak.password}")
-    private String password;
-
     @Value("${keycloak.grant-type}")
     private String grantType;
 
@@ -75,7 +69,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     public KeycloakToken getAdminAccessToken() {
         val url = UriComponentsBuilder.fromUriString(baseUrl)
                                       .path("/realms")
-                                      .path("/master")
+                                      .path("/" + realm)
                                       .path("/protocol")
                                       .path("/openid-connect")
                                       .path("/token")
@@ -85,10 +79,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setContentType(APPLICATION_FORM_URLENCODED);
 
         val body = new LinkedMultiValueMap<String, String>();
-        body.add("client_id", "admin-cli");
-        body.add("username", username);
-        body.add("password", password);
-        body.add("grant_type", "password");
+        body.add("client_id", clientName);
+        body.add("client_secret", secret);
+        body.add("grant_type", "client_credentials");
 
         try {
             return restClient.post()
@@ -160,7 +153,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 
                 Set<String> roles = authUser.getRoles();
                 if (roles != null && !roles.isEmpty()) {
-                    final ResponseEntity<String> assignedRoles = assignClientRoles(authUser.getAuthId(), roles);
+                    final ResponseEntity<String> assignedRoles = assignClientRoles(authUser.getAuthId(), roles, token);
                     if (assignedRoles == null || !assignedRoles.getStatusCode().is2xxSuccessful()) {
                         authUser.setCredentials(null);
                         throw new RestClientException(String.format("Failed to assign roles '%s' to %s", roles, authUser));
@@ -176,19 +169,23 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity<String> assignClientRoles(@NonNull String authId, @NonNull Set<String> roles) {
-        val client = listClients().stream()
-                                  .filter(c -> c.getClientId().equals(clientName)) // clientName = "management_system"
-                                  .findFirst()
-                                  .orElseThrow(() -> new RuntimeException("Keycloak Client not found: " + clientName));
+    public ResponseEntity<String> assignClientRoles(@NonNull String authId,
+                                                    @NonNull Set<String> roles,
+                                                    KeycloakToken accessToken) {
+
+        val token = (accessToken == null) ? getAdminAccessToken() : accessToken;
+
+        val client = listClients(token).stream()
+                            .filter(c -> c.getClientId().equals(clientName))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Keycloak Client not found: " + clientName));
 
         val clientUuid = client.getId();
 
-        val targetRoles = listAvailableClientRoles(authId, clientUuid).stream()
+        val targetRoles = listAvailableClientRoles(authId, clientUuid, token).stream()
                                             .filter(role -> roles.contains(role.getName()))
                                             .collect(toList());
 
-        val token = getAdminAccessToken();
         val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s", baseUrl, realm, authId, clientUuid);
         try {
             return restClient.post()
@@ -207,10 +204,12 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public List<KeycloakRole> listAvailableClientRoles(@NonNull String authId, @NonNull String clientUuid) {
+    public List<KeycloakRole> listAvailableClientRoles(@NonNull String authId,
+                                                       @NonNull String clientUuid,
+                                                       KeycloakToken accessToken) {
         val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s/available", baseUrl, realm, authId, clientUuid);
 
-        val token = getAdminAccessToken();
+        val token = (accessToken == null) ? getAdminAccessToken() : accessToken;
 
         try {
             KeycloakRole[] roles = restClient.get()
@@ -282,8 +281,9 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public List<KeycloakClient> listClients() {
-        val token = getAdminAccessToken();
+    public List<KeycloakClient> listClients(KeycloakToken accessToken) {
+        val token = (accessToken == null) ? getAdminAccessToken() : accessToken;
+
         val url = format("%s/admin/realms/%s/clients", baseUrl, realm);
 
         try {

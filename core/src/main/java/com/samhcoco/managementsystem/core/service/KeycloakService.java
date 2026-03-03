@@ -28,16 +28,19 @@ public interface KeycloakService extends JwtAuthService {
      * Assigns the given Client roles to the specified {@link KeycloakUser}.
      * @param authId {@link AuthUser} ID for the {@link KeycloakUser}.
      * @param roles  Roles to be assigned to the user.
+     * @param accessToken  {@link KeycloakToken} access token.
      * @return {@link ResponseEntity}.
      */
-    ResponseEntity<String> assignClientRoles(String authId, Set<String> roles);
+    ResponseEntity<String> assignClientRoles(String authId, Set<String> roles, KeycloakToken accessToken);
 
     /**
      * Lists the available Client {@link KeycloakRole}s for the given {@link KeycloakUser}.
      * @param authId The {@link AuthUser} {@link KeycloakUser} ID.
+     * @param clientUuid Keycloak client UUID.
+     * @param accessToken  {@link KeycloakToken} access token.
      * @return Returns collection of available {@link KeycloakRole}.
      */
-    List<KeycloakRole> listAvailableClientRoles(String authId, String clientUuid);
+    List<KeycloakRole> listAvailableClientRoles(String authId, String clientUuid, KeycloakToken accessToken);
 
     /**
      * Deletes a {@link KeycloakUser} from keycloak.
@@ -57,9 +60,10 @@ public interface KeycloakService extends JwtAuthService {
 
     /**
      * Returns all existing Keycloak clients for the configured Realm.
+     * @param accessToken {@link KeycloakToken} access token.
      * @return All {@link KeycloakClient}s.
      */
-    List<KeycloakClient> listClients();
+    List<KeycloakClient> listClients(KeycloakToken accessToken);
 
     /**
      * Returns meta-information the given keycloak access token.
