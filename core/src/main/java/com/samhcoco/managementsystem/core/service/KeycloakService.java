@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.core.service;
 
+import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.keycloak.*;
 import org.springframework.http.ResponseEntity;
 
@@ -24,19 +25,19 @@ public interface KeycloakService extends JwtAuthService {
 //    KeycloakUser create(KeycloakUser keycloakUser, Set<String> roles);
 
     /**
-     * Assigns the given roles to the specified {@link KeycloakUser}.
-     * @param userId {@link KeycloakUser} Id.
+     * Assigns the given Client roles to the specified {@link KeycloakUser}.
+     * @param authId {@link AuthUser} ID for the {@link KeycloakUser}.
      * @param roles  Roles to be assigned to the user.
      * @return {@link ResponseEntity}.
      */
-    ResponseEntity<String> assignRoles(String userId, Set<String> roles);
+    ResponseEntity<String> assignClientRoles(String authId, Set<String> roles);
 
     /**
-     * Lists the available {@link KeycloakRole} for the given {@link KeycloakUser}.
-     * @param userId The {@link KeycloakUser} ID.
+     * Lists the available Client {@link KeycloakRole}s for the given {@link KeycloakUser}.
+     * @param authId The {@link AuthUser} {@link KeycloakUser} ID.
      * @return Returns collection of available {@link KeycloakRole}.
      */
-    List<KeycloakRole> listAvailableRoles(String userId);
+    List<KeycloakRole> listAvailableClientRoles(String authId, String clientUuid);
 
     /**
      * Deletes a {@link KeycloakUser} from keycloak.

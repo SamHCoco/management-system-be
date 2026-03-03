@@ -75,7 +75,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     public KeycloakToken getAdminAccessToken() {
         val url = UriComponentsBuilder.fromUriString(baseUrl)
                                       .path("/realms")
-                                      .path("/" + realm)
+                                      .path("/master")
                                       .path("/protocol")
                                       .path("/openid-connect")
                                       .path("/token")
@@ -160,7 +160,11 @@ public class KeycloakServiceImpl implements KeycloakService {
 
                 Set<String> roles = authUser.getRoles();
                 if (roles != null && !roles.isEmpty()) {
-                    assignRoles(authUser.getAuthId(), roles);
+                    final ResponseEntity<String> assignedRoles = assignClientRoles(authUser.getAuthId(), roles);
+                    if (assignedRoles == null || !assignedRoles.getStatusCode().is2xxSuccessful()) {
+                        authUser.setCredentials(null);
+                        throw new RestClientException(String.format("Failed to assign roles '%s' to %s", roles, authUser));
+                    }
                 }
                 return authUser;
             }
@@ -171,55 +175,21 @@ public class KeycloakServiceImpl implements KeycloakService {
         return null;
     }
 
-//    @Override
-//    public KeycloakUser create(@NonNull KeycloakUser keycloakUser, Set<String> roles) {
-//        val url = format("%s/admin/realms/%s/users", baseUrl, realm);
-//
-//        val token = getAdminAccessToken();
-//
-//        try {
-//            if (isNull(token)) {
-//                throw new RestClientException("Failed to get Keycloak Admin Access Token");
-//            }
-//
-//            ResponseEntity<Void> response = restClient.post()
-//                                                      .uri(url)
-//                                                      .contentType(MediaType.APPLICATION_JSON)
-//                                                      .header("Authorization", "Bearer " + token.getAccessToken())
-//                                                      .body(keycloakUser)
-//                                                      .retrieve()
-//                                                      .toBodilessEntity();
-//
-//            if (response.getStatusCode().is2xxSuccessful()) {
-//                val location = response.getHeaders().getLocation();
-//                if (nonNull(location)) {
-//                    val uri = location.toString().split("/");
-//                    keycloakUser.setId(uri[uri.length - 1]);
-//                }
-//                log.debug("Successfully created '{}'", keycloakUser);
-//
-//                if (!isNull(roles) && !roles.isEmpty()) {
-//                    assignRoles(keycloakUser.getId(), roles);
-//                }
-//
-//                return keycloakUser;
-//            }
-//        } catch (RestClientException e) {
-//            log.error("Failed to create {}: {}", keycloakUser, e.getMessage());
-//            return null;
-//        }
-//        return null;
-//    }
-
     @Override
-    public ResponseEntity<String> assignRoles(@NonNull String userId, @NonNull Set<String> roles) {
-        val url = format("%s/admin/realms/%s/users/%s/role-mappings/realm", baseUrl, realm, userId);
+    public ResponseEntity<String> assignClientRoles(@NonNull String authId, @NonNull Set<String> roles) {
+        val client = listClients().stream()
+                                  .filter(c -> c.getClientId().equals(clientName)) // clientName = "management_system"
+                                  .findFirst()
+                                  .orElseThrow(() -> new RuntimeException("Keycloak Client not found: " + clientName));
+
+        val clientUuid = client.getId();
+
+        val targetRoles = listAvailableClientRoles(authId, clientUuid).stream()
+                                            .filter(role -> roles.contains(role.getName()))
+                                            .collect(toList());
 
         val token = getAdminAccessToken();
-        val targetRoles = listAvailableRoles(userId).stream()
-                                                    .filter(role -> roles.contains(role.getName()))
-                                                    .collect(toList());
-
+        val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s", baseUrl, realm, authId, clientUuid);
         try {
             return restClient.post()
                             .uri(url)
@@ -229,16 +199,16 @@ public class KeycloakServiceImpl implements KeycloakService {
                             .retrieve()
                             .toEntity(String.class);
         } catch (RestClientResponseException e) {
-            log.error("Failed to assign Keycloak user with Auth ID '{}' roles {}: {}", userId, roles, e.getMessage());
-            log.error("Deleting Keycloak user with Auth ID '{}'...", userId);
-            delete(userId);
+            log.error("Failed to assign Keycloak user with Auth ID '{}' roles {}: {}", authId, roles, e.getMessage());
+            log.error("Attempting to delete Keycloak user with Auth ID '{}'...", authId);
+            delete(authId);
         }
         return null;
     }
 
     @Override
-    public List<KeycloakRole> listAvailableRoles(@NonNull String userId) {
-        val url = format("%s/admin/realms/%s/users/%s/role-mappings/realm/available", baseUrl, realm, userId);
+    public List<KeycloakRole> listAvailableClientRoles(@NonNull String authId, @NonNull String clientUuid) {
+        val url = String.format("%s/admin/realms/%s/users/%s/role-mappings/clients/%s/available", baseUrl, realm, authId, clientUuid);
 
         val token = getAdminAccessToken();
 
@@ -254,7 +224,7 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         } catch (RestClientResponseException e) {
             val error = e.getMessage();
-            log.error("Failed to list available roles for user with ID '{}' : '{}'", userId, error);
+            log.error("Failed to list available roles for user with Auth ID '{}' : '{}'", authId, error);
         }
         return emptyList();
     }
