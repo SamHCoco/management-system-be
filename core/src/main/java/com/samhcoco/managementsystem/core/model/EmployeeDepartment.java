@@ -3,6 +3,7 @@ package com.samhcoco.managementsystem.core.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @ToString

@@ -1,12 +1,13 @@
 package com.samhcoco.managementsystem.core.service;
 
+import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.keycloak.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Set;
 
-public interface KeycloakService {
+public interface KeycloakService extends JwtAuthService {
 
     /**
      * Returns an admin {@link KeycloakToken}.
@@ -15,27 +16,31 @@ public interface KeycloakService {
     KeycloakToken getAdminAccessToken();
 
 
-    /**
-     * Creates a {@link KeycloakUser}.
-     * @param user The {@link KeycloakUser}.
-     * @return The created {@link KeycloakUser}.
-     */
-    KeycloakUser create(KeycloakUser user);
+//    /**
+//     * Creates a {@link KeycloakUser}.
+//     * @param keycloakUser The {@link KeycloakUser}.
+//     * @param roles  Roles to be assigned to the user.
+//     * @return The created {@link KeycloakUser}.
+//     */
+//    KeycloakUser create(KeycloakUser keycloakUser, Set<String> roles);
 
     /**
-     * Assigns the given roles to the specified {@link KeycloakUser}.
-     * @param userId {@link KeycloakUser} Id.
+     * Assigns the given Client roles to the specified {@link KeycloakUser}.
+     * @param authId {@link AuthUser} ID for the {@link KeycloakUser}.
      * @param roles  Roles to be assigned to the user.
+     * @param accessToken  {@link KeycloakToken} access token.
      * @return {@link ResponseEntity}.
      */
-    ResponseEntity<String> assignRoles(String userId, Set<String> roles);
+    ResponseEntity<String> assignClientRoles(String authId, Set<String> roles, KeycloakToken accessToken);
 
     /**
-     * Lists the available {@link KeycloakRole} for the given {@link KeycloakUser}.
-     * @param userId The {@link KeycloakUser} ID.
+     * Lists the available Client {@link KeycloakRole}s for the given {@link KeycloakUser}.
+     * @param authId The {@link AuthUser} {@link KeycloakUser} ID.
+     * @param clientUuid Keycloak client UUID.
+     * @param accessToken  {@link KeycloakToken} access token.
      * @return Returns collection of available {@link KeycloakRole}.
      */
-    List<KeycloakRole> listAvailableRoles(String userId);
+    List<KeycloakRole> listAvailableClientRoles(String authId, String clientUuid, KeycloakToken accessToken);
 
     /**
      * Deletes a {@link KeycloakUser} from keycloak.
@@ -55,9 +60,10 @@ public interface KeycloakService {
 
     /**
      * Returns all existing Keycloak clients for the configured Realm.
+     * @param accessToken {@link KeycloakToken} access token.
      * @return All {@link KeycloakClient}s.
      */
-    List<KeycloakClient> listClients();
+    List<KeycloakClient> listClients(KeycloakToken accessToken);
 
     /**
      * Returns meta-information the given keycloak access token.

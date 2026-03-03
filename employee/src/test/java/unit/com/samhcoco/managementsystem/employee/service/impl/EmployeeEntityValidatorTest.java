@@ -1,8 +1,10 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.errorMessages;
+import com.samhcoco.managementsystem.core.model.EmployeeDepartment;
+import com.samhcoco.managementsystem.core.model.ErrorMessages;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.employee.repository.EmployeeDepartmentRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator.*;
@@ -26,13 +29,19 @@ public class EmployeeEntityValidatorTest {
     private EmployeeRepository employeeRepository;
 
     @Mock
-    private errorMessages errorMessages;
+    private EmployeeDepartmentRepository employeeDepartmentRepository;
+
+    @Mock
+    private ErrorMessages errorMessages;
 
     private EmployeeEntityValidator underTest;
 
     @BeforeEach
     public void setup() {
-        underTest = new EmployeeEntityValidator(employeeRepository, errorMessages);
+        underTest = new EmployeeEntityValidator(
+                employeeRepository,
+                employeeDepartmentRepository,
+                errorMessages);
     }
 
     @Test
@@ -40,12 +49,35 @@ public class EmployeeEntityValidatorTest {
         when(employeeRepository.existsByEmail(any())).thenReturn(false);
         when(employeeRepository.existsByPhone(any())).thenReturn(false);
 
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
         Employee validEmployee = buildValidEmployee();
         validEmployee.setId(0);
 
         Map<String, String> errors = underTest.validateCreate(validEmployee);
 
         assertThat(errors).isEmpty();
+
+        verify(employeeRepository).existsByEmail(any());
+        verify(employeeRepository).existsByPhone(any());
+    }
+
+    @Test
+    public void testValidateCommonFields_departmentInvalid() {
+        when(employeeRepository.existsByEmail(any())).thenReturn(false);
+        when(employeeRepository.existsByPhone(any())).thenReturn(false);
+
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
+        Employee validEmployee = buildValidEmployee();
+        validEmployee.setId(0);
+        validEmployee.setDepartmentId(100);
+
+        Map<String, String> errors = underTest.validateCreate(validEmployee);
+
+        assertThat(errors).containsKey(EMPLOYEE_DEPARTMENT_ID);
 
         verify(employeeRepository).existsByEmail(any());
         verify(employeeRepository).existsByPhone(any());
@@ -91,6 +123,9 @@ public class EmployeeEntityValidatorTest {
         when(employeeRepository.existsByEmail(any())).thenReturn(true);
         when(employeeRepository.existsByPhone(any())).thenReturn(false);
 
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
         Map<String, String> errors = underTest.validateCreate(invalid);
 
         assertThat(errors).containsKey(EMAIL);
@@ -108,6 +143,9 @@ public class EmployeeEntityValidatorTest {
         when(employeeRepository.existsByPhone(any())).thenReturn(true);
         when(employeeRepository.existsByEmail(any())).thenReturn(false);
 
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
         Map<String, String> errors = underTest.validateCreate(invalid);
 
         assertThat(errors).containsKey(PHONE);
@@ -123,6 +161,9 @@ public class EmployeeEntityValidatorTest {
 
         when(employeeRepository.findByEmail(any())).thenReturn(null);
         when(employeeRepository.findByPhone(any())).thenReturn(null);
+
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
 
         Map<String, String> errors = underTest.validateUpdate(valid);
 
@@ -171,6 +212,9 @@ public class EmployeeEntityValidatorTest {
         when(employeeRepository.findByEmail(any())).thenReturn(new Employee());
         when(employeeRepository.findByPhone(any())).thenReturn(null);
 
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
         Map<String, String> errors = underTest.validateUpdate(employee);
 
         assertThat(errors).containsKey(EMAIL);
@@ -187,6 +231,9 @@ public class EmployeeEntityValidatorTest {
         when(employeeRepository.findByEmail(any())).thenReturn(null);
         when(employeeRepository.findByPhone(any())).thenReturn(new Employee());
 
+        List<EmployeeDepartment> validDepartments = buildValidEmployeeDepartments();
+        when(employeeDepartmentRepository.findAllByDeletedFalse()).thenReturn(validDepartments);
+
         Map<String, String> errors = underTest.validateUpdate(employee);
 
         assertThat(errors).containsKey(PHONE);
@@ -194,6 +241,13 @@ public class EmployeeEntityValidatorTest {
 
         verify(employeeRepository).findByPhone(any());
         verify(employeeRepository).findByEmail(any());
+    }
+
+    private List<EmployeeDepartment> buildValidEmployeeDepartments() {
+        return List.of(
+                EmployeeDepartment.builder().id(1).name("Sales").build(),
+                EmployeeDepartment.builder().id(2).name("Marketing").build()
+        );
     }
 
     private Employee buildValidEmployee() {

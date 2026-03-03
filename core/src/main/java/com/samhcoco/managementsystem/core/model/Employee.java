@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.core.model;
 
+import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,11 +12,14 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "employee")
-public class Employee extends Auditable {
+public class Employee extends Auditable implements AuthIdentifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+
+    @Column(name = "auth_id")
+    private String authId;
 
     @Column(name = "first_name")
     private String firstName;

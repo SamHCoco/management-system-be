@@ -1,13 +1,17 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.AppPage;
+import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,8 +19,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -26,13 +29,16 @@ import static org.mockito.Mockito.when;
 public class EmployeeServiceImplTest {
 
     @Mock
+    private AuthService authService;
+
+    @Mock
     private EmployeeRepository employeeRepository;
 
     private EmployeeServiceImpl underTest;
 
     @BeforeEach
     public void setup() {
-        underTest = new EmployeeServiceImpl(employeeRepository);
+        underTest = new EmployeeServiceImpl(authService, employeeRepository);
     }
 
     @Test
@@ -41,7 +47,7 @@ public class EmployeeServiceImplTest {
 
         Employee result = underTest.findById((long) 1);
 
-        assertThat(result).isNotNull();
+        assertNotNull(result);
 
         verify(employeeRepository).findById(anyLong());
     }
@@ -59,21 +65,24 @@ public class EmployeeServiceImplTest {
 
         Page<Employee> result = underTest.listAllEmployees(customAppPage);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getContent().size()).isEqualTo(2);
-
+        assertEquals(2, result.getContent().size());
         verify(employeeRepository).findAll(any(PageRequest.class));
     }
 
     @Test
     public void testCreate_happyPath() {
+        EmployeeRegistrationDto employeeRegistrationDto = new EmployeeRegistrationDto();
+
         Employee employee = new Employee();
+        AuthUser authUser = new AuthUser();
+
         when(employeeRepository.save(any())).thenReturn(employee);
+        when(authService.createUser(any())).thenReturn(authUser);
 
-        Employee persisted = underTest.create(employee);
+        Employee persisted = underTest.create(employeeRegistrationDto);
 
-        assertThat(persisted).isEqualTo(employee);
-        verify(employeeRepository).save(any());
+        assertEquals(employee, persisted);
+        verify(employeeRepository, Mockito.atMost(2)).save(any());
     }
 
     @Test
@@ -83,7 +92,7 @@ public class EmployeeServiceImplTest {
 
         Employee updated = underTest.update(employee);
 
-        assertThat(updated).isEqualTo(employee);
+        assertEquals(employee, updated);
         verify(employeeRepository).save(any());
     }
 

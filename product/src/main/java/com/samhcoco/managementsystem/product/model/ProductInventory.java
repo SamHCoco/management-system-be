@@ -29,7 +29,4 @@ public class ProductInventory extends Auditable {
 
     @Column(name = "low_stock_alerted")
     private boolean lowStockAlerted;
-
-    @Column(name = "deleted")
-    private boolean deleted;
 }

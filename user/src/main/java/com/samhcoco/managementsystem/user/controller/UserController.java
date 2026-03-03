@@ -3,6 +3,7 @@ package com.samhcoco.managementsystem.user.controller;
 import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.core.model.dto.UserDto;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
+import com.samhcoco.managementsystem.core.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(ApiVersion.VERSION_1 + "/" + USER)
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        final User createdUser = userService.create(userDto);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+        final User createdUser = userService.create(userRegistrationDto);
         return ResponseEntity.status(CREATED).body(createdUser.toDto());
     }
 }

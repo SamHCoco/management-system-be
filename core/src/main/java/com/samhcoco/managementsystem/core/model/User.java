@@ -1,6 +1,7 @@
 package com.samhcoco.managementsystem.core.model;
 
 import com.samhcoco.managementsystem.core.model.dto.UserDto;
+import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name = "user")
-public class User extends Auditable {
+public class User extends Auditable implements AuthIdentifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -32,9 +33,6 @@ public class User extends Auditable {
 
     @Column(name = "email")
     private String email;
-
-    @Column(name = "deleted")
-    private boolean deleted;
 
     public UserDto toDto() {
         return UserDto.builder()

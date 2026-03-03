@@ -2,6 +2,7 @@ package com.samhcoco.managementsystem.employee.service;
 
 import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.AppPage;
+import com.samhcoco.managementsystem.core.model.EmployeeRegistrationDto;
 
 public interface EmployeeService {
 
@@ -20,11 +21,12 @@ public interface EmployeeService {
     org.springframework.data.domain.Page<Employee> listAllEmployees(AppPage appPage);
 
     /**
-     * Persists a single new {@link Employee}.
-     * @param employee {@link Employee}.
+     * Persists a single new {@link Employee} from the given {@link EmployeeRegistrationDto}
+     * and register them with the Auth Server.
+     * @param employeeRegistrationDto {@link EmployeeRegistrationDto}.
      * @return Persisted {@link Employee}.
      */
-    Employee create(Employee employee);
+    Employee create(EmployeeRegistrationDto employeeRegistrationDto);
 
     /**
      * Updates the supplied {@link Employee}.
