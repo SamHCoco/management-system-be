@@ -1,9 +1,9 @@
 package com.samhcoco.managementsystem.employee.service.impl;
 
-import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.EmployeeDepartment;
+import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.employee.model.EmployeeDepartment;
 import com.samhcoco.managementsystem.core.model.ErrorMessages;
-import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.EntityValidator;
 import com.samhcoco.managementsystem.employee.repository.EmployeeDepartmentRepository;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.core.model;
+package com.samhcoco.managementsystem.employee.model;
 
 import lombok.*;
 
