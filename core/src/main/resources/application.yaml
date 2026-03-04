@@ -7,6 +7,8 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:mysql://${DB_URL}:3306/management_system
     username: ${DB_USER}
