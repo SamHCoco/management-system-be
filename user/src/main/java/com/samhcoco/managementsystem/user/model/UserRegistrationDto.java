@@ -1,5 +1,6 @@
-package com.samhcoco.managementsystem.core.model;
+package com.samhcoco.managementsystem.user.model;
 
+import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
 import lombok.*;
 

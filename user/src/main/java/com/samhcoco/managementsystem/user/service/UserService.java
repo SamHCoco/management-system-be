@@ -1,7 +1,7 @@
 package com.samhcoco.managementsystem.user.service;
 
 import com.samhcoco.managementsystem.core.model.User;
-import com.samhcoco.managementsystem.core.model.UserRegistrationDto;
+import com.samhcoco.managementsystem.user.model.UserRegistrationDto;
 
 public interface UserService {
     /**

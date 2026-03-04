@@ -3,7 +3,7 @@ package com.samhcoco.managementsystem.user.controller;
 import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.core.model.dto.UserDto;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
-import com.samhcoco.managementsystem.core.model.UserRegistrationDto;
+import com.samhcoco.managementsystem.user.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
