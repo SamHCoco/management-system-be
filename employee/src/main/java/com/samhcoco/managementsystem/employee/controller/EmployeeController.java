@@ -53,7 +53,7 @@ public class EmployeeController {
         return ResponseEntity.status(BAD_REQUEST).body(errors);
     }
 
-    @PreAuthorize("hasAnyRole('admin','user')")
+    @PreAuthorize("hasAnyRole('admin','employee')")
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping(ApiVersion.VERSION_1 + "/" + EMPLOYEES)
     public ResponseEntity<Object> listAllEmployees(@RequestParam(required = false) Integer page,
