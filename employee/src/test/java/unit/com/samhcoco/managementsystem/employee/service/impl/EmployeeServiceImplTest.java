@@ -2,9 +2,9 @@ package unit.com.samhcoco.managementsystem.employee.service.impl;
 
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.AuthUser;
-import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.core.model.EmployeeRegistrationDto;
-import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
+import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
