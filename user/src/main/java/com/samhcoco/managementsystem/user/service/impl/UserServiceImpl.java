@@ -52,18 +52,6 @@ public class UserServiceImpl implements UserService {
                                                   customJwtClaims,
                                                   roles);
 
-
-//        KeycloakUser keycloakUser = KeycloakUser.builder()
-//                                                .username(createdUser.getEmail())
-//                                                .email(createdUser.getEmail())
-//                                                .firstName(createdUser.getFirstName())
-//                                                .lastName(createdUser.getLastName())
-//                                                .enabled(true)
-//                                                .emailVerified(true)
-//                                                .attributes(Map.of(USER_ID, singletonList(String.valueOf(createdUser.getId()))))
-//                                                .credentials(List.of(userCredential))
-//                                                .build();
-
         AuthUser createdAuthUser = keycloakService.createUser(authUser);
 
         if (isNull(createdAuthUser)) {
@@ -73,15 +61,6 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setAuthId(authUser.getAuthId());
-
-//        final ResponseEntity<String> roles = keycloakService.assignRoles(keycloakUser.getId(),
-//                                                                         );
-//
-//        if (isNull(roles) || !roles.getStatusCode().is2xxSuccessful()) {
-//            keycloakService.delete(keycloakUser.getId());
-//            error = String.format("Keycloak failed to assign %s 'user' role", user);
-//            throwUserCreationFailedException(error);
-//        }
 
         final User persistedUser = userRepository.save(user);
         log.info("User successfully created and registered with Keycloak: {}", persistedUser);
