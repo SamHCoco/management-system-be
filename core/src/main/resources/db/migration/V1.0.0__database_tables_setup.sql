@@ -9,7 +9,8 @@ create table if not exists `user` (
     `last_modified_at` datetime,
     `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
-    primary key (`id`)
+    primary key (`id`),
+    index `idx_user_auth_id` (`auth_id`)
 ) engine=InnoDB default charset=utf8mb4;
 
 create table if not exists `employee_department` (
@@ -40,7 +41,11 @@ create table if not exists `employee` (
     `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (id),
-    foreign key (`department_id`) references `employee_department` (`id`)
+    constraint `fk_employee_department`
+        foreign key (`department_id`)
+        references `employee_department` (`id`)
+        on update cascade
+        on delete restrict
 );
 
 create table if not exists `product` (
@@ -66,10 +71,16 @@ create table if not exists `product_inventory` (
     `deleted` boolean not null default 0,
     primary key (`id`),
     constraint `fk_product_inventory_product`
-        foreign key (`product_id`) references `product` (`id`)
+        foreign key (`product_id`)
+        references `product` (`id`)
         on update cascade
         on delete restrict
 ) engine=InnoDB default charset=utf8mb4;
+
+create table if not exists `order` (
+    `id` bigint unsigned auto_increment not null,
+    `user_id` bigint unsigned not null
+) engine=InnoDB default charset=utf8mb4;;
 
 create table if not exists `product_order` (
     `id` bigint unsigned auto_increment not null,
@@ -82,9 +93,15 @@ create table if not exists `product_order` (
     `last_modified_by` varchar(255) not null default 'system',
     `deleted` boolean not null default 0,
     primary key (`id`),
+    index `idx_product_order_user_id` (`user_id`),
     constraint `fk_product_order_product`
-        foreign key (`product_id`) references `product` (`id`)
+        foreign key (`product_id`)
+        references `product` (`id`)
+        on update cascade
+        on delete restrict,
+    constraint `fk_product_order_user`
+        foreign key (`user_id`)
+        references `user` (`id`)
         on update cascade
         on delete restrict
 ) engine=InnoDB default charset=utf8mb4;
-
