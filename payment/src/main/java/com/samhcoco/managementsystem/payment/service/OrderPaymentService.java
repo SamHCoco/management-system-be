@@ -7,7 +7,7 @@ public interface OrderPaymentService {
     /**
      * Takes payment from {@link User} for order.
      * @param orderPayment {@link OrderPayment} for an order.
-     * @return True if payment succeeded, false otherwise.
+     * @return {@link OrderPayment} for the order is successful, null otherwise.
      */
-    boolean debitOrderPayment(OrderPayment orderPayment);
+    OrderPayment debitOrderPayment(OrderPayment orderPayment);
 }

@@ -1,4 +1,4 @@
-package com.samhcoco.managementsystem.product.repository;
+package com.samhcoco.managementsystem.core.repository;
 
 import com.samhcoco.managementsystem.core.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

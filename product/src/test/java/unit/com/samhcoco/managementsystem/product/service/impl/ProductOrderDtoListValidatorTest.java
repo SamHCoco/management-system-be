@@ -2,8 +2,8 @@ package unit.com.samhcoco.managementsystem.product.service.impl;
 
 import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
 import com.samhcoco.managementsystem.core.model.dto.ProductOrderDtoList;
-import com.samhcoco.managementsystem.product.repository.ProductRepository;
-import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
+import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.service.impl.ProductOrderDtoListValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

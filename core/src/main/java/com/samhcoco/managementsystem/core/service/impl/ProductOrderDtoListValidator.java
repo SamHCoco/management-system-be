@@ -1,9 +1,9 @@
-package com.samhcoco.managementsystem.product.service.impl;
+package com.samhcoco.managementsystem.core.service.impl;
 
 import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
-import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
 import com.samhcoco.managementsystem.core.model.dto.ProductOrderDtoList;
-import com.samhcoco.managementsystem.product.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.service.CreateEntityValidator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

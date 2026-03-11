@@ -27,6 +27,7 @@
 		<module>product</module>
         <module>user</module>
         <module>order</module>
+        <module>payment</module>
     </modules>
 	<scm>
 		<connection/>
