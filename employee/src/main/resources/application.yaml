@@ -23,6 +23,11 @@ spring:
     url: jdbc:mysql://${DB_URL}:3306/management_system
     user: ${DB_USER}
     password: ${DB_PASSWORD}
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   security:
     oauth2:
       client:

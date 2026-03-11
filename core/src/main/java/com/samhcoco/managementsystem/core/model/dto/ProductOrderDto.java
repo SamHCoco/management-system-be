@@ -1,6 +1,6 @@
-package com.samhcoco.managementsystem.product.model.dto;
+package com.samhcoco.managementsystem.core.model.dto;
 
-import com.samhcoco.managementsystem.product.model.ProductOrder;
+import com.samhcoco.managementsystem.core.model.ProductOrder;
 import lombok.*;
 
 
