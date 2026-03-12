@@ -63,7 +63,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     private String baseUrl;
 
     private final RestClient restClient;
-    private JpaRepositoryService jpaRepositoryService;
+    private final JpaRepositoryService jpaRepositoryService;
 
     @Override
     public KeycloakToken getAdminAccessToken() {
@@ -373,7 +373,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         try {
             BaseRepository<T, Long> repository = jpaRepositoryService.getRepository(clazz);
 
-            final T entity = repository.findById(id);
+            final T entity = repository.findByIdAndDeletedFalse(id);
             if (isNull(entity)) {
                 throw authorizationCheckException(format("ID in JWT claim invalid: Entity with ID '%s' not found", id));
             }

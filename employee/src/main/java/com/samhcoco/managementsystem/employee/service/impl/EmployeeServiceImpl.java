@@ -4,10 +4,10 @@ import com.samhcoco.managementsystem.core.enums.KeycloakRoles;
 import com.samhcoco.managementsystem.core.exception.UserCreationFailedException;
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.AuthUser;
-import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.core.model.keycloak.Credential;
-import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import jakarta.transaction.Transactional;
@@ -38,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findById(long id) {
-        return employeeRepository.findById(id);
+        return employeeRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override

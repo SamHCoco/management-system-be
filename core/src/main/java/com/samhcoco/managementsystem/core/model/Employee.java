@@ -1,6 +1,5 @@
-package com.samhcoco.managementsystem.employee.model;
+package com.samhcoco.managementsystem.core.model;
 
-import com.samhcoco.managementsystem.core.model.Auditable;
 import com.samhcoco.managementsystem.core.service.AuthIdentifiable;
 import jakarta.persistence.*;
 import lombok.*;
