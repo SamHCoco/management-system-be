@@ -13,11 +13,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order extends Auditable {
     @Id
     @Column(name = "id")
-    private UUID id;
+    private String id;
 
     @Column(name = "user_id")
     private long userId;
@@ -25,7 +25,7 @@ public class Order extends Auditable {
     @PrePersist
     public void prePersist() {
         if (this.id == null) {
-            this.id = UUID.randomUUID();
+            this.id = UUID.randomUUID().toString();
         }
     }
 }
