@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.samhcoco.managementsystem.order.ProductOrderStatus.RECEIVED;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,13 +31,19 @@ public class OrderServiceImpl implements OrderService {
     public CompletedOrderPayment processOrderPayment(@NonNull OrderPayment orderPayment) {
         try {
             final Order orderDetails = orderRepository.save(Order.builder()
-                                                                .id(orderPayment.getOrderId())
+                                                                .id(orderPayment.getOrderId().toString())
                                                                 .userId(orderPayment.getUserId())
                                                                 .build());
 
             final List<ProductOrder> productOrders = productOrderRepository.saveAll(orderPayment.getOrders()
                                                                             .stream()
-                                                                            .map(com.samhcoco.managementsystem.core.model.dto.ProductOrderDto::toProductOrder)
+                                                                            .map(o -> {
+                                                                                final ProductOrder productOrder = o.toProductOrder();
+                                                                                productOrder.setStatus(RECEIVED.name());
+                                                                                productOrder.setOrderId(orderDetails.getId());
+                                                                                productOrder.setUserId(orderDetails.getUserId());
+                                                                                return productOrder;
+                                                                            })
                                                                             .toList());
 
             return CompletedOrderPayment.builder()

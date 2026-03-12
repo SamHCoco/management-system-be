@@ -14,7 +14,7 @@ import lombok.*;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductOrderDto {
-    private Long id;
+    private long id;
     private long productId;
     private short quantity;
 

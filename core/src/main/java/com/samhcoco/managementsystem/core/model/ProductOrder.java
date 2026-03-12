@@ -26,8 +26,12 @@ public class ProductOrder extends Auditable {
     @Column(name = "user_id")
     private long userId;
 
+    // todo - normalise
     @Column(name = "status")
     private String status;
+
+    @Column(name = "order_id")
+    private String orderId;
 
     public ProductOrderDto toProductOrderDto() {
         return ProductOrderDto.builder()
