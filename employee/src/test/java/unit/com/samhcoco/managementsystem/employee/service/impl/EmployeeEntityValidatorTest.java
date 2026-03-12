@@ -1,9 +1,9 @@
 package unit.com.samhcoco.managementsystem.employee.service.impl;
 
-import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.employee.model.EmployeeDepartment;
 import com.samhcoco.managementsystem.core.model.ErrorMessages;
-import com.samhcoco.managementsystem.employee.repository.EmployeeRepository;
+import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.employee.repository.EmployeeDepartmentRepository;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import org.junit.jupiter.api.BeforeEach;

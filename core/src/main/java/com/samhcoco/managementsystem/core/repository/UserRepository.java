@@ -1,7 +1,6 @@
-package com.samhcoco.managementsystem.user.repository;
+package com.samhcoco.managementsystem.core.repository;
 
 import com.samhcoco.managementsystem.core.model.User;
-import com.samhcoco.managementsystem.core.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

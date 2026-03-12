@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.employee.service;
 
-import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
 

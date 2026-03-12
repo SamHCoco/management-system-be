@@ -1,5 +1,6 @@
 package com.samhcoco.managementsystem.employee.model;
 
+import com.samhcoco.managementsystem.core.model.Employee;
 import lombok.*;
 
 @Setter

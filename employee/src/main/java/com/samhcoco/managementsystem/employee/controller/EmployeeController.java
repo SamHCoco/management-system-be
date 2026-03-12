@@ -1,7 +1,7 @@
 package com.samhcoco.managementsystem.employee.controller;
 
 import com.samhcoco.managementsystem.core.model.AppPage;
-import com.samhcoco.managementsystem.employee.model.Employee;
+import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
