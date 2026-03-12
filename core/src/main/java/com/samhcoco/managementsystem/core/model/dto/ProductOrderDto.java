@@ -1,6 +1,7 @@
-package com.samhcoco.managementsystem.product.model.dto;
+package com.samhcoco.managementsystem.core.model.dto;
 
-import com.samhcoco.managementsystem.product.model.ProductOrder;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.samhcoco.managementsystem.core.model.ProductOrder;
 import lombok.*;
 
 
@@ -11,8 +12,9 @@ import lombok.*;
 @ToString
 @Builder
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductOrderDto {
-    private long id;
+    private Long id;
     private long productId;
     private short quantity;
 

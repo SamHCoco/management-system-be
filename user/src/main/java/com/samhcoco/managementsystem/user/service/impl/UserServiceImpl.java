@@ -6,7 +6,7 @@ import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.User;
 import com.samhcoco.managementsystem.user.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.core.model.keycloak.Credential;
-import com.samhcoco.managementsystem.user.repository.UserRepository;
+import com.samhcoco.managementsystem.core.repository.UserRepository;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
 import com.samhcoco.managementsystem.user.service.UserService;
 import jakarta.transaction.Transactional;

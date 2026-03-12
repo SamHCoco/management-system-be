@@ -1,7 +1,6 @@
-package com.samhcoco.managementsystem.employee.repository;
+package com.samhcoco.managementsystem.core.repository;
 
-import com.samhcoco.managementsystem.employee.model.Employee;
-import com.samhcoco.managementsystem.core.repository.BaseRepository;
+import com.samhcoco.managementsystem.core.model.Employee;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,8 +1,8 @@
 package com.samhcoco.managementsystem.product.service.impl;
 
-import com.samhcoco.managementsystem.product.model.Product;
+import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.product.model.ProductInventory;
-import com.samhcoco.managementsystem.product.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.repository.ProductRepository;
 import com.samhcoco.managementsystem.product.service.ProductInventoryService;
 import com.samhcoco.managementsystem.product.service.ProductService;
 import jakarta.transaction.Transactional;

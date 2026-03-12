@@ -1,6 +1,6 @@
 package com.samhcoco.managementsystem.product.service;
 
-import com.samhcoco.managementsystem.product.model.Product;
+import com.samhcoco.managementsystem.core.model.Product;
 import com.samhcoco.managementsystem.product.model.ProductInventory;
 
 public interface ProductService {

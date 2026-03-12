@@ -1,9 +1,9 @@
 package unit.com.samhcoco.managementsystem.product.service.impl;
 
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderDto;
-import com.samhcoco.managementsystem.product.model.dto.ProductOrderDtoList;
-import com.samhcoco.managementsystem.product.repository.ProductRepository;
-import com.samhcoco.managementsystem.product.service.impl.ProductOrderDtoListValidator;
+import com.samhcoco.managementsystem.core.model.dto.ProductOrderDto;
+import com.samhcoco.managementsystem.core.model.dto.ProductOrderDtoList;
+import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.core.service.impl.ProductOrderDtoListValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,8 +36,8 @@ public class ProductOrderDtoListValidatorTest {
         when(productRepository.existsByIdInAndDeletedFalse(anySet())).thenReturn(true);
 
         final List<ProductOrderDto> validOrders = List.of(
-                new ProductOrderDto(0, 1, (short) 5),
-                new ProductOrderDto(0, 2, (short) 1)
+                new ProductOrderDto(0L, 1, (short) 5),
+                new ProductOrderDto(0L, 2, (short) 1)
         );
 
         final ProductOrderDtoList validProductOrderDtoList = new ProductOrderDtoList(validOrders);
