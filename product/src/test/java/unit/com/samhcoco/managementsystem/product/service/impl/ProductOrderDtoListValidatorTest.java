@@ -36,8 +36,8 @@ public class ProductOrderDtoListValidatorTest {
         when(productRepository.existsByIdInAndDeletedFalse(anySet())).thenReturn(true);
 
         final List<ProductOrderDto> validOrders = List.of(
-                new ProductOrderDto(0, 1, (short) 5),
-                new ProductOrderDto(0, 2, (short) 1)
+                new ProductOrderDto(0L, 1, (short) 5),
+                new ProductOrderDto(0L, 2, (short) 1)
         );
 
         final ProductOrderDtoList validProductOrderDtoList = new ProductOrderDtoList(validOrders);
