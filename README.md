@@ -6,6 +6,8 @@ The project is organized as a multi-module Maven project with the following modu
 - `user` - User management project
 - `employee` - Employee management project
 - `product` - Product management project
+- `order` - Order project
+- `payment` - Payment project
 
 ## Bill of Materials
 
@@ -23,10 +25,12 @@ This Spring Boot project is built with the following technologies and versions:
 - **MySQL Driver**: 9.4.0
 - **H2 Database**: 2.3.232 (Spring Boot managed version)
 
+### Messaging
+- **Spring Kafka**: 3.1.2 (Spring Boot managed version)
+
 ### Development Tools
 - **Lombok**: 1.18.42
 - **SpringDoc OpenAPI**: 2.8.13
-
 
 ### Build Configuration
 - **Build Tool**: Maven
@@ -36,8 +40,8 @@ This Spring Boot project is built with the following technologies and versions:
 ## Security Features
 - Spring Security with OAuth2 Resource Server
 - JWT token authentication
+- Role Based Access Control
 - OAuth2 Client support
-- Input validation with Bean Validation API
 
 ## API Documentation
 - Automatic OpenAPI 3 documentation via SpringDoc
