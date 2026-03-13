@@ -60,3 +60,15 @@ app:
   errors:
     null-or-empty: "Field cannot be null or empty"
     entity-null: "Entity cannot be null"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: management-system-app
