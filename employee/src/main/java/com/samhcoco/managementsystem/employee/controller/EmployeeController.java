@@ -2,8 +2,9 @@ package com.samhcoco.managementsystem.employee.controller;
 
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
+import com.samhcoco.managementsystem.core.model.dto.EmployeeDto;
 import com.samhcoco.managementsystem.core.utils.ApiVersion;
+import com.samhcoco.managementsystem.employee.model.dto.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeEntityValidator;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -74,7 +75,7 @@ public class EmployeeController {
             appPage.setSortDirection(sortDirection);
         }
 
-        Page<Employee> pageResult = employeeService.listAllEmployees(appPage);
+        Page<EmployeeDto> pageResult = employeeService.listAllEmployees(appPage);
         return ResponseEntity.ok(pageResult);
     }
 
