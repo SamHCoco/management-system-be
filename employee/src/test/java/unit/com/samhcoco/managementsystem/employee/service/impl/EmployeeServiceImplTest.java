@@ -3,9 +3,10 @@ package unit.com.samhcoco.managementsystem.employee.service.impl;
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
+import com.samhcoco.managementsystem.core.model.dto.EmployeeDto;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.AuthService;
+import com.samhcoco.managementsystem.employee.model.dto.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.employee.service.impl.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,17 +57,17 @@ public class EmployeeServiceImplTest {
     public void testListAllEmployees_happyPath() {
         AppPage customAppPage = new AppPage();
 
-        Page<Employee> expectedPage = new PageImpl<>(List.of(
-                Employee.builder().id(1L).firstName("John").lastName("Doe").build(),
-                Employee.builder().id(2L).firstName("Jane").lastName("Smith").build()
+        Page<EmployeeDto> expectedPage = new PageImpl<>(List.of(
+                EmployeeDto.builder().id(1L).firstName("John").lastName("Doe").build(),
+                EmployeeDto.builder().id(2L).firstName("Jane").lastName("Smith").build()
         ));
 
-        when(employeeRepository.findAll(any(PageRequest.class))).thenReturn(expectedPage);
+        when(employeeRepository.findAllByDeletedFalse(any(PageRequest.class))).thenReturn(expectedPage);
 
-        Page<Employee> result = underTest.listAllEmployees(customAppPage);
+        Page<EmployeeDto> result = underTest.listAllEmployees(customAppPage);
 
         assertEquals(2, result.getContent().size());
-        verify(employeeRepository).findAll(any(PageRequest.class));
+        verify(employeeRepository).findAllByDeletedFalse(any(PageRequest.class));
     }
 
     @Test

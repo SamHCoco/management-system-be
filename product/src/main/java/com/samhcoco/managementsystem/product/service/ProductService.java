@@ -1,7 +1,10 @@
 package com.samhcoco.managementsystem.product.service;
 
+import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Product;
+import com.samhcoco.managementsystem.core.model.dto.ProductDto;
 import com.samhcoco.managementsystem.product.model.ProductInventory;
+import org.springframework.data.domain.Page;
 
 public interface ProductService {
 
@@ -13,4 +16,11 @@ public interface ProductService {
      * @return Created {@link Product}.
      */
     Product create(Product product, Integer stockQuantity);
+
+    /**
+     * Lists all {@link Product}s.
+     * @param appPage {@link AppPage}.
+     * @return {@link Page} of {@link ProductDto}.
+     */
+    Page<ProductDto> listAllProducts(AppPage appPage);
 }

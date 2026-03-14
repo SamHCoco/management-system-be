@@ -1,14 +1,17 @@
 package com.samhcoco.managementsystem.product.service.impl;
 
+import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.Product;
-import com.samhcoco.managementsystem.product.model.ProductInventory;
+import com.samhcoco.managementsystem.core.model.dto.ProductDto;
 import com.samhcoco.managementsystem.core.repository.ProductRepository;
+import com.samhcoco.managementsystem.product.model.ProductInventory;
 import com.samhcoco.managementsystem.product.service.ProductInventoryService;
 import com.samhcoco.managementsystem.product.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -25,5 +28,10 @@ public class ProductServiceImpl implements ProductService {
         final Product created = productRepository.save(product);
         final ProductInventory productInventory = productInventoryService.create(product, stockQuantity);
         return product;
+    }
+
+    @Override
+    public Page<ProductDto> listAllProducts(@NonNull AppPage appPage) {
+        return productRepository.findAllByDeletedFalse(appPage.toPageRequest());
     }
 }
