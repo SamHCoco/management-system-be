@@ -1,8 +1,10 @@
 package com.samhcoco.managementsystem.employee.service;
 
-import com.samhcoco.managementsystem.core.model.Employee;
 import com.samhcoco.managementsystem.core.model.AppPage;
-import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
+import com.samhcoco.managementsystem.core.model.Employee;
+import com.samhcoco.managementsystem.core.model.dto.EmployeeDto;
+import com.samhcoco.managementsystem.employee.model.dto.EmployeeRegistrationDto;
+import org.springframework.data.domain.Page;
 
 public interface EmployeeService {
 
@@ -14,11 +16,11 @@ public interface EmployeeService {
     Employee findById(long id);
 
     /**
-     * Returns all {@link Employee}.
+     * Lists all {@link Employee}s.
      * @param appPage {@link AppPage}
-     * @return {@link org.springframework.data.domain.Page} of {@link Employee}.
+     * @return {@link Page} of {@link EmployeeDto}.
      */
-    org.springframework.data.domain.Page<Employee> listAllEmployees(AppPage appPage);
+    Page<EmployeeDto> listAllEmployees(AppPage appPage);
 
     /**
      * Persists a single new {@link Employee} from the given {@link EmployeeRegistrationDto}

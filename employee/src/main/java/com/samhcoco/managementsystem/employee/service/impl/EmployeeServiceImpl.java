@@ -5,16 +5,16 @@ import com.samhcoco.managementsystem.core.exception.UserCreationFailedException;
 import com.samhcoco.managementsystem.core.model.AppPage;
 import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.Employee;
-import com.samhcoco.managementsystem.employee.model.EmployeeRegistrationDto;
+import com.samhcoco.managementsystem.core.model.dto.EmployeeDto;
 import com.samhcoco.managementsystem.core.model.keycloak.Credential;
 import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.AuthService;
+import com.samhcoco.managementsystem.employee.model.dto.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<Employee> listAllEmployees(@NonNull AppPage appPage) {
-        return employeeRepository.findAll(appPage.toPageRequest());
+    public Page<EmployeeDto> listAllEmployees(@NonNull AppPage appPage) {
+        return employeeRepository.findAllByDeletedFalse(appPage.toPageRequest());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee create(@NonNull EmployeeRegistrationDto employeeRegistrationDto) {
         employeeRegistrationDto.setAuthId("TEMP-ID");
 
-        val createdEmployee = employeeRepository.save(employeeRegistrationDto.toEmployee());
+        Employee createdEmployee = employeeRepository.save(employeeRegistrationDto.toEmployee());
 
         final Credential credential = Credential.builder()
                                                 .temporary(false)
@@ -79,7 +79,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         createdEmployee.setAuthId(authUser.getAuthId());
-        return employeeRepository.save(createdEmployee);
+        createdEmployee = employeeRepository.save(createdEmployee);
+        log.info("SUCCESS - persisted {} and registered them with Keycloak with roles: {}", createdEmployee, roles);
+        return createdEmployee;
     }
 
     @Override

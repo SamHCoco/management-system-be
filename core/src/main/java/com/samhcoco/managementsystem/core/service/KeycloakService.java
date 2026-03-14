@@ -16,14 +16,6 @@ public interface KeycloakService extends JwtAuthService {
     KeycloakToken getAdminAccessToken();
 
 
-//    /**
-//     * Creates a {@link KeycloakUser}.
-//     * @param keycloakUser The {@link KeycloakUser}.
-//     * @param roles  Roles to be assigned to the user.
-//     * @return The created {@link KeycloakUser}.
-//     */
-//    KeycloakUser create(KeycloakUser keycloakUser, Set<String> roles);
-
     /**
      * Assigns the given Client roles to the specified {@link KeycloakUser}.
      * @param authId {@link AuthUser} ID for the {@link KeycloakUser}.
