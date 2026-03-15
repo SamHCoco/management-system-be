@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.samhcoco.managementsystem.order.ProductOrderStatus.RECEIVED;
+import static com.samhcoco.managementsystem.order.enums.ProductOrderStatus.RECEIVED;
 
 @Slf4j
 @Service
