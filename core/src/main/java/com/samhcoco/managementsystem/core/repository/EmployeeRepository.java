@@ -29,9 +29,9 @@ public interface EmployeeRepository extends BaseRepository<Employee, Long> {
                       e.address_city as addressCity,
                       e.address_post_code as addressPostCode
                   FROM employee e
-                  WHERE e.deleted = 0
+                  WHERE e.deleted = false
                   """,
-            countQuery = "SELECT COUNT(*) FROM employee e WHERE e.deleted = 0",
+            countQuery = "SELECT COUNT(*) FROM employee e WHERE e.deleted = false",
             nativeQuery = true)
     Page<EmployeeDto> findAllByDeletedFalse(Pageable pageable);
 }
