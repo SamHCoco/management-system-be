@@ -19,9 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = """
                    SELECT p.id as id, p.name as name, p.price as price
                    FROM product p
-                   WHERE p.deleted = 0
+                   WHERE p.deleted = false
        """,
-           countQuery = "SELECT COUNT(*) FROM product p WHERE p.deleted = 0",
+           countQuery = "SELECT COUNT(*) FROM product p WHERE p.deleted = false",
            nativeQuery = true)
     Page<ProductDto> findAllByDeletedFalse(Pageable pageable);
 }

@@ -7,12 +7,12 @@ import com.samhcoco.managementsystem.core.repository.ProductRepository;
 import com.samhcoco.managementsystem.product.model.ProductInventory;
 import com.samhcoco.managementsystem.product.service.ProductInventoryService;
 import com.samhcoco.managementsystem.product.service.ProductService;
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service

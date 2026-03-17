@@ -4,16 +4,16 @@ import com.samhcoco.managementsystem.core.enums.KeycloakRoles;
 import com.samhcoco.managementsystem.core.exception.UserCreationFailedException;
 import com.samhcoco.managementsystem.core.model.AuthUser;
 import com.samhcoco.managementsystem.core.model.User;
-import com.samhcoco.managementsystem.user.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.core.model.keycloak.Credential;
 import com.samhcoco.managementsystem.core.repository.UserRepository;
 import com.samhcoco.managementsystem.core.service.KeycloakService;
+import com.samhcoco.managementsystem.user.model.UserRegistrationDto;
 import com.samhcoco.managementsystem.user.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
