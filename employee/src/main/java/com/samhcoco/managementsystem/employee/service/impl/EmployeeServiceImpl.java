@@ -11,12 +11,12 @@ import com.samhcoco.managementsystem.core.repository.EmployeeRepository;
 import com.samhcoco.managementsystem.core.service.AuthService;
 import com.samhcoco.managementsystem.employee.model.dto.EmployeeRegistrationDto;
 import com.samhcoco.managementsystem.employee.service.EmployeeService;
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
