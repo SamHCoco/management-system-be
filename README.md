@@ -1,86 +1,72 @@
-****# Management System Backend****
+# Management System Backend
 
-****## Project Modules****
+## Project Modules
 
-The project is organized as a multi-module Maven project with the following modules:
+* `core` - Shared core functionality across projects
+* `user` - User management project
+* `employee` - Employee management project
+* `product` - Product management project
 
-- `core` - Shared core functionality across projects
-
-- `user` - User management project
-
-- `employee` - Employee management project
-
-- `product` - Product management project
-
-- `order` - Order project
-
-- `payment` - Payment project
-
-****## Bill of Materials****
+## Bill of Materials
 
 This Spring Boot project is built with the following technologies and versions:
 
-****### Core Technologies****
+### Core Technologies
 
-- ********Java******: 21
+* **Java**: 21
+* **Spring Boot**: 3.4.11
+* **Spring Cloud**: 2024.0.2
+* **Spring Security**: 6.4.12 (Spring Boot managed version)
+* **Keycloak**: 26.4.5
+* **Kafka**: 3.8.0
 
-- ********Spring Boot******: 3.4.11
+### Database & Migration
 
-- ********Spring Cloud******: 2024.0.2
+* **Flyway Core**: 11.14.1
+* **Flyway PostgreSQL**: 12.1.0
+* **PostgreSQL Driver**: 42.7.8
+* **H2 Database**: 2.3.232 (Spring Boot managed version)
+* **CockroachDB**: v25.4.5
 
-- ********Spring Security******: 6.4.12 (Spring Boot managed version)
+### Messaging
 
-- ********Keycloak******: 26.4.5
+* **Spring Kafka**: 3.1.2 (Spring Boot managed version)
 
-- ********Kafka******: 3.8.0
+### Development Tools
 
-****### Database & Migration****
+* **Lombok**: 1.18.42
+* **SpringDoc OpenAPI**: 2.8.13
 
-- ********Flyway Core******: 11.14.1
+### Build Configuration
 
-- ********Flyway PostgreSQL******: 12.1.0
+* **Build Tool**: Maven
+* **Compiler Plugin**: Maven Compiler Plugin with Lombok annotation processing
+* **Spring Boot Maven Plugin**: For application packaging and execution
 
-- ********PostgreSQL Driver******: 42.7.8
+## Security Features
 
-- ********H2 Database******: 2.3.232 (Spring Boot managed version)
+* Spring Security with OAuth2 Resource Server
+* JWT token authentication
+* Role Based Access Control
+* OAuth2 Client support via Keycloak
 
-- ********CockroachDB******: v25.4.5 (development/testing)
+## API Documentation
 
-****### Messaging****
+* Automatic OpenAPI 3 documentation via SpringDoc
+* Swagger UI interface for API testing and exploration
 
-- ********Spring Kafka******: 3.1.2 (Spring Boot managed version)
+## Relevant Project Repositories
 
-****### Development Tools****
+* [management-system-keycloak](https://github.com/SamHCoco/management-system-keycloak)
+* [management-system-fe](https://github.com/SamHCoco/management-system-fe)
+* [management-system-redis](https://github.com/SamHCoco/management-system-redis)
+* [management-system-gateway](https://github.com/SamHCoco/management-system-gateway)
+* [management-system-cockroachdb](https://github.com/SamHCoco/management-system-cockroachdb)
+* [management-system-kafka](https://github.com/SamHCoco/management-system-kafka)
+* [management-system-eureka](https://github.com/SamHCoco/management-system-eureka)
+* [management-system-prometheus](https://github.com/SamHCoco/management-system-prometheus)
 
-- ********Lombok******: 1.18.42
-
-- ********SpringDoc OpenAPI******: 2.8.13
-
-****### Build Configuration****
-
-- ********Build Tool******: Maven
-
-- ********Compiler Plugin******: Maven Compiler Plugin with Lombok annotation processing
-
-- ********Spring Boot Maven Plugin******: For application packaging and execution
-
-****## Security Features****
-
-- Spring Security with OAuth2 Resource Server
-
-- JWT token authentication
-
-- Role Based Access Control
-
-- OAuth2 Client support via Keycloak
-
-****## API Documentation****
-
-- Automatic OpenAPI 3 documentation via SpringDoc
-
-- Swagger UI interface for API testing and exploration
-
-****## Development Setup Steps - How To Get Project Running****
+## Development Setup Steps - How To Get Project Running
 
 1. Run the Keycloak container by running the Docker Compose file in the `management-system-keycloak` repository. Once it is running, use the Keycloak Admin UI to import the `management_system` realm and client using the `realm-export.json` file.
 
