@@ -1,6 +1,6 @@
-**# Management System Backend**
+****# Management System Backend****
 
-**## Project Modules**
+****## Project Modules****
 
 The project is organized as a multi-module Maven project with the following modules:
 
@@ -16,55 +16,55 @@ The project is organized as a multi-module Maven project with the following modu
 
 - `payment` - Payment project
 
-**## Bill of Materials**
+****## Bill of Materials****
 
 This Spring Boot project is built with the following technologies and versions:
 
-**### Core Technologies**
+****### Core Technologies****
 
-- ****Java****: 21
+- ********Java******: 21
 
-- ****Spring Boot****: 3.4.11
+- ********Spring Boot******: 3.4.11
 
-- ****Spring Cloud****: 2024.0.2
+- ********Spring Cloud******: 2024.0.2
 
-- ****Spring Security****: 6.4.12 (Spring Boot managed version)
+- ********Spring Security******: 6.4.12 (Spring Boot managed version)
 
-- ****Keycloak****: 26.4.5
+- ********Keycloak******: 26.4.5
 
-- ****Kafka****: 3.8.0
+- ********Kafka******: 3.8.0
 
-**### Database & Migration**
+****### Database & Migration****
 
-- ****Flyway Core****: 11.14.1
+- ********Flyway Core******: 11.14.1
 
-- ****Flyway PostgreSQL****: 12.1.0
+- ********Flyway PostgreSQL******: 12.1.0
 
-- ****PostgreSQL Driver****: 42.7.8
+- ********PostgreSQL Driver******: 42.7.8
 
-- ****H2 Database****: 2.3.232 (Spring Boot managed version)
+- ********H2 Database******: 2.3.232 (Spring Boot managed version)
 
-- ****CockroachDB****: v25.4.5 (development/testing)
+- ********CockroachDB******: v25.4.5 (development/testing)
 
-**### Messaging**
+****### Messaging****
 
-- ****Spring Kafka****: 3.1.2 (Spring Boot managed version)
+- ********Spring Kafka******: 3.1.2 (Spring Boot managed version)
 
-**### Development Tools**
+****### Development Tools****
 
-- ****Lombok****: 1.18.42
+- ********Lombok******: 1.18.42
 
-- ****SpringDoc OpenAPI****: 2.8.13
+- ********SpringDoc OpenAPI******: 2.8.13
 
-**### Build Configuration**
+****### Build Configuration****
 
-- ****Build Tool****: Maven
+- ********Build Tool******: Maven
 
-- ****Compiler Plugin****: Maven Compiler Plugin with Lombok annotation processing
+- ********Compiler Plugin******: Maven Compiler Plugin with Lombok annotation processing
 
-- ****Spring Boot Maven Plugin****: For application packaging and execution
+- ********Spring Boot Maven Plugin******: For application packaging and execution
 
-**## Security Features**
+****## Security Features****
 
 - Spring Security with OAuth2 Resource Server
 
@@ -74,23 +74,22 @@ This Spring Boot project is built with the following technologies and versions:
 
 - OAuth2 Client support via Keycloak
 
-**## API Documentation**
+****## API Documentation****
 
 - Automatic OpenAPI 3 documentation via SpringDoc
 
 - Swagger UI interface for API testing and exploration
 
-**## Development Setup Steps - How To Get Project Running**
+****## Development Setup Steps - How To Get Project Running****
 
 1. Run the Keycloak container by running the Docker Compose file in the `management-system-keycloak` repository. Once it is running, use the Keycloak Admin UI to import the `management_system` realm and client using the `realm-export.json` file.
 
-
-
-2. Run the CockroachDB container by running the Docker Compose file in the `management-system-cockroachdb` repository. Once it is running, connect to CockroachDB running the `dev_connect_cockroach.sh` file and run the following command:
+2. Run the CockroachDB container by running the Docker Compose file in the `management-system-cockroachdb` repository. Once it is running, connect to CockroachDB by running the `dev_connect_cockroach.sh` file and run the following command:
 
 ```sql
 CREATE DATABASE management_system;
 ```
 
+3. Run Redis by running the Docker Compose file in the `management-system-redis` repository.
 
-3. Configure IntelliJ IDEA to use the `.env` file in the repo when running any of the microservices. Replace the Keycloak secret in the `.env` file with the secret for the `management_system` client from your own Keycloak instance.
+4. Configure IntelliJ IDEA to use the `.env` file in the repo when running any of the microservices. Replace the Keycloak secret in the `.env` file with the secret for the `management_system` client from your own Keycloak instance.
