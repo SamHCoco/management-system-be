@@ -34,11 +34,5 @@ build/
 
 .DS_Store
 DS_Store
-.env
-env.sh
-/certs
 
-dev_data.sql
-dev_reset_db.sh
-dev_populate_db.sh
-dev_connect_cockroach.sh
+/certs
